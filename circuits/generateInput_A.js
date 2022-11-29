@@ -48,6 +48,7 @@ async function createInputs() {
     console.log(input_A);
 
     fs.writeFileSync("input_A.json", JSON.stringify(input_A, null, 4));
+
 }
 
 createInputs();
