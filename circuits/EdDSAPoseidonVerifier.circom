@@ -24,6 +24,7 @@ include "../node_modules/circomlib/circuits/bitify.circom";
 include "../node_modules/circomlib/circuits/escalarmulany.circom";
 include "../node_modules/circomlib/circuits/escalarmulfix.circom";
 
+
 template EdDSAPoseidonVerifier() {
     signal input enabled;
     //log("enabled: ", enabled);
@@ -130,53 +131,3 @@ template EdDSAPoseidonVerifier() {
 
     signal output out <== 1;
 }
-
-template ZKP_MPC_A() {
-
-    signal input r;
-    //log("r: ", r);
-
-    signal input enabled;
-    //log("enabled: ", enabled);
-    signal input Ax;
-    //log("Ax: ", Ax);
-    signal input Ay;
-    //log("Ay: ", Ay);
-
-    signal input S;
-    //log("S: ", S);
-    signal input R8x;
-    //log("R8x: ", R8x);
-    signal input R8y;
-    //log("R8y: ", R8y);
-
-    signal input a;
-    //log("M: ", M);
-
-    component signatureVerifier = EdDSAPoseidonVerifier();
-    signatureVerifier.enablexd <== enabled;
-    signatureVerifier.Ax <== Ax;
-    signatureVerifier.Ay <== Ay;
-    signatureVerifier.S <== S;
-    signatureVerifier.R8x <== R8x;
-    signatureVerifier.R8y <== R8y;
-    signatureVerifier.m <== a;
-
-    signatureVerifier.out === 1;
-
-    signal output comR;
-
-    let hasherR = Poseidon(1);
-    hasherR.in[0] <== r;
-
-    comR <== hasherR.out;
-
-    signal output comRa;
-
-    let hasherRa = Poseidon(1);
-    hasherRa.in[0] <== r + a;
-
-    comRa <== hasherRa.out;
-}
-
-component main = ZKP_MPC_A();
