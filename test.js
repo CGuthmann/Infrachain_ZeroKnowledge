@@ -158,6 +158,8 @@ async function main() {
 	
 
 		console.log(contractTestingInstance._address);
+
+		fs.writeFileSync("./testContractAddress", contractTestingInstance._address);
 		
 		let calldata = await groth16ExportSolidityCallData(proof, publicSignals);
 		console.log(calldata);
