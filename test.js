@@ -16,6 +16,8 @@
 
 'use strict';
 
+const circuitName = "circuit_participant";
+
 const fs = require("fs");
 const config = require("./config.json")
 const Web3 = require("web3");
@@ -26,7 +28,7 @@ const web3 = new Web3(provider);
 const snarkjs = require("snarkjs");
 const BigNumber = require("bignumber.js");
 
-const inputs = require("./circuits/input_A.json");
+const inputs = require("./circuits/input_" + circuitName + ".json");
 
 const account = config.account
 
@@ -89,12 +91,12 @@ async function main() {
 
 	// fs.writeFileSync("./contractAddress", newContractInstance._address);
 
-	const { proof, publicSignals } = await snarkjs.groth16.fullProve(inputs, "circuits/circuit_participant_js/circuit_participant.wasm", "circuits/circuit_participant_0001.zkey");
+	const { proof, publicSignals } = await snarkjs.groth16.fullProve(inputs, "circuits/" + circuitName + "_js/" + circuitName + ".wasm", "circuits/" + circuitName + "_0001.zkey");
 
     console.log("Proof: ");
     console.log(JSON.stringify(proof, null, 1));
 
-    const vKey = JSON.parse(fs.readFileSync("circuits/verification_key_circuit_participant.json"));
+    const vKey = JSON.parse(fs.readFileSync("circuits/verification_key_" + circuitName + ".json"));
 
     const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
 

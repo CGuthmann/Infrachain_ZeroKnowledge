@@ -2,6 +2,7 @@
 
 echo "Installing basic dependencies"
 sudo apt-get install -y curl
+sudo apt-get install -y bc
 
 echo "Installing node"
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
@@ -26,10 +27,5 @@ truffle init
 
 echo "Preparing the ZKP trusted setups and deploying the corresponding verifiers"
 cd circuits 
-./bootstrap.sh A
+npm i 
 cd ..
-
-truffle build --reset
-
-echo "Running some sample transactions"
-node test.js
