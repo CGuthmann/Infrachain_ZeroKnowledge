@@ -12,6 +12,6 @@ verification_key_*
 
 package-lock.json
 node_modules/
-
+devnet/
 build/contracts/
 contracts/
