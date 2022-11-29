@@ -1,0 +1,53 @@
+version: '3.7'
+services:
+  node1:
+    image: ethereum/client-go:v1.9.3
+    volumes:
+      - ${PATH_TO_DEVNET_DIR}/node1:/root/.ethereum
+    command: ["--datadir", "/root/.ethereum/",
+              "--syncmode", "full",
+              "--port", "30311",
+              "--networkid", "${NETWORK_ID}",
+              "--gasprice", "1",
+              "--unlock", "${NODE_1_ADDRESS}",
+              "--password", "root/.ethereum/password",
+              "--mine",
+              "--ipcdisable",
+              "--nousb"]
+
+  node2:
+    image: ethereum/client-go:v1.9.3
+    volumes:
+      - ${PATH_TO_DEVNET_DIR}/node2:/root/.ethereum
+    command: ["--datadir", "/root/.ethereum/",
+              "--syncmode", "full",
+              "--port", "30312",
+              "--networkid", "${NETWORK_ID}",
+              "--gasprice", "1",
+              "--unlock", "${NODE_2_ADDRESS}",
+              "--password", "root/.ethereum/password",
+              "--mine",
+              "--ipcdisable",
+              "--nousb"]
+
+
+  node-rpc:
+    image: ethereum/client-go:v1.9.3
+    volumes:
+      - ${PATH_TO_DEVNET_DIR}/node-rpc:/root/.ethereum
+    command: ["--datadir", "/root/.ethereum/",
+              "--syncmode", "full",
+              "--port", "30313",
+              "--networkid", "${NETWORK_ID}",
+              "--ipcdisable",
+              "--rpc",
+              "--rpcaddr", "0.0.0.0",
+              "--rpcport","8545",
+              "--rpcvhosts=*",
+              "--nousb"]
+    ports:
+      - 8545:8545
+      - 9545:9545
+
+
+

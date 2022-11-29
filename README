@@ -1,0 +1,21 @@
+This repository contains 2 dockerfile to help you setup a POA using Go-Ethereum to use the same architecture as the luxembourgish public sector's blockchain
+
+## Requirements
+
+docker
+docker-compose
+
+## Usage
+
+    docker-compose up -d
+    docker-compose -f docker-compose-explorer.yml up -d
+
+2 authority nodes will start to produce block every 15s and a single 'public' node will expose a rpc endpoint.
+The block explorer is available at localhost:80 (it may take a few minutes to start)
+you can test the connectivity of the rpc-node with
+
+    curl --data '{"method":"eth_getBalance","params":["0x8f04152f99d639fe427aadc32d3d9648038e8df6", "latest"],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
+it should return
+    {"jsonrpc":"2.0","id":1,"result":"0x200000000000000000000000000000000000000000000000000000000000000"}
+
+
