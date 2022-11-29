@@ -6,31 +6,33 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 
-interface Verifier_circuit_participants{//A->B B->C C->A check the consumption "with the shift"
+interface Verifier_circuit_participants {
+    //A->B B->C C->A check the consumption "with the shift"
     function verifyProof(
-        uint[2] memory a,
-        uint[2][2] memory b,
-        uint[2] memory c,
-        uint[3] memory input
+        uint256[2] memory a,
+        uint256[2][2] memory b,
+        uint256[2] memory c,
+        uint256[3] memory input
     ) external view returns (bool r);
 }
 
-interface Verifier_circuit_total{//A->End
+interface Verifier_circuit_total {
+    //A->End
     function verifyProof(
-        uint[2] memory a,
-        uint[2][2] memory b,
-        uint[2] memory c,
-        uint[3] memory input
+        uint256[2] memory a,
+        uint256[2][2] memory b,
+        uint256[2] memory c,
+        uint256[3] memory input
     ) external view returns (bool r);
 }
 
-
-interface Verifier_circuit_claim{//All the winners,
+interface Verifier_circuit_claim {
+    //All the winners,
     function verifyProof(
-        uint[2] memory a,
-        uint[2][2] memory b,
-        uint[2] memory c,
-        uint[3] memory input
+        uint256[2] memory a,
+        uint256[2][2] memory b,
+        uint256[2] memory c,
+        uint256[3] memory input
     ) external view returns (bool r);
 }
 
@@ -38,6 +40,34 @@ contract CollateralBet is Ownable {
     ERC20Burnable private ERC20BurnableInterface;
     address public tokenAddress;
     address[] public registeredParticipants;
+
+    enum Stage {
+        Zero,
+        One,
+        Two,
+        Three,
+        Four,
+        Five
+    }
+
+    struct Container {
+        address aAddress;
+        address bAddress;
+        address cAddress;
+        Stage stage;
+        uint256[3] aInput;
+        uint256[3] bInput;
+        uint256[3] cInput;
+        uint256 total;
+    }
+
+    Container[] state;
+
+    mapping(address => uint256) public hashMap;
+
+    Verifier_circuit_participants public VerifierCircuitParticipantsInterface;
+    Verifier_circuit_total public VerifierCircuitTotalInterface;
+    Verifier_circuit_claim public VerifierCircuitClaimInterface;
 
     //EPOCH HANDLING
     uint256 public epochTimestamp;
@@ -53,10 +83,25 @@ contract CollateralBet is Ownable {
         }
     }
 
-    constructor(address _tokenAddress) {
+    constructor(
+        address _tokenAddress,
+        address verifierCircuitParticipantsContract,
+        address verifierCircuitTotalContract,
+        address verifierCircuitClaimContract
+    ) {
         tokenAddress = _tokenAddress; //TODO: better have additional checks
         ERC20BurnableInterface = ERC20Burnable(tokenAddress);
         updateEpochTimestamp();
+
+        VerifierCircuitParticipantsInterface = Verifier_circuit_participants(
+            verifierCircuitParticipantsContract
+        );
+        VerifierCircuitTotalInterface = Verifier_circuit_total(
+            verifierCircuitTotalContract
+        );
+        VerifierCircuitClaimInterface = Verifier_circuit_claim(
+            verifierCircuitClaimContract
+        );
     }
 
     function getContractBalance() public view returns (uint256) {
@@ -110,31 +155,79 @@ contract CollateralBet is Ownable {
         return _unprocessedArray;
     }
 
-    function performMPCs(address[] memory _processedArrayOfParticipants) internal {
-        for(uint256 i=0; i<_processedArrayOfParticipants.length-2;i=i+3){
-            performSingleMPC(_processedArrayOfParticipants[i],
-                _processedArrayOfParticipants[i+1],
-                _processedArrayOfParticipants[i+2]
+    function performMPCs(address[] memory _processedArrayOfParticipants)
+    internal
+    {
+        for (
+            uint256 i = 0;
+            i < _processedArrayOfParticipants.length - 2;
+            i = i + 3
+        ) {
+            performSingleMPC(
+                _processedArrayOfParticipants[i],
+                _processedArrayOfParticipants[i + 1],
+                _processedArrayOfParticipants[i + 2]
             );
         }
     }
 
     //TODO: getter for each stage for the UI
 
+    function performSingleMPC(
+        address aAddress,
+        address bAddress,
+        address cAddress
+    ) internal {
+        // uint balance[3] = [1, 2, 3];
+        //   uint[3] memory c = [uint(1) , 2, 3];
 
-    function performSingleMPC(address A, address B, address C) internal{
+        uint256[3] memory mock = [uint256(0), uint256(0), uint256(0)];
+        Container memory container = Container(
+            aAddress,
+            bAddress,
+            cAddress,
+            Stage.Zero,
+            mock,
+            mock,
+            mock,
+            0
+        );
 
+        state.push(container);
+        uint256 index = state.length - 1;
+        hashMap[aAddress] = index;
+        hashMap[bAddress] = index;
+        hashMap[cAddress] = index;
     }
 
+    function one() external {
+        address _aAddress = msg.sender;
+    }
+
+    function two() external {
+        address _bAddress = msg.sender;
+    }
+
+    function three() external {
+        address _cAddress = msg.sender;
+    }
+
+    function four() external {
+        address _aAddress = msg.sender;
+    }
+
+    function five() external {}
 
     function burnTokens() internal {
-        ERC20BurnableInterface.burn(ERC20BurnableInterface.balanceOf(address(this)));
+        ERC20BurnableInterface.burn(
+            ERC20BurnableInterface.balanceOf(address(this))
+        );
     }
 
     function mintTokens(address _playerAddress, uint256 _numberOfTokens)
     internal
     {
-        ERC20BurnableInterface.mint(_playerAddress, _numberOfTokens);
+        //ERC20BurnableInterface.mint(_playerAddress, _numberOfTokens);
     }
 
     function shuffleArray(address[] storage shuffle)
