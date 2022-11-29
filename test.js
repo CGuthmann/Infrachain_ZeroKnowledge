@@ -28,7 +28,10 @@ const web3 = new Web3(provider);
 const snarkjs = require("snarkjs");
 const BigNumber = require("bignumber.js");
 
-const inputs = require("./circuits/input_" + circuitName + ".json");
+const input_A = require("./circuits/inputs_A.json");
+const input_B = require("./circuits/inputs_B.json");
+const input_C = require("./circuits/inputs_C.json");
+const input_total = require("./circuits/inputs_total.json")
 
 const account = config.account
 
@@ -91,10 +94,14 @@ async function main() {
 
 	// fs.writeFileSync("./contractAddress", newContractInstance._address);
 
-	const { proof, publicSignals } = await snarkjs.groth16.fullProve(inputs, "circuits/" + circuitName + "_js/" + circuitName + ".wasm", "circuits/" + circuitName + "_0001.zkey");
+	for (let inputs in Enumerator([input_A, input_B, input_C])) {
+
+	const { proof, publicSignals } = await snarkjs.groth16.fullProve(inputs, "circuits/circuit_participant_js/participant.wasm", "circuits/parcitipant_0001.zkey");
 
     console.log("Proof: ");
     console.log(JSON.stringify(proof, null, 1));
+
+	}
 
     const vKey = JSON.parse(fs.readFileSync("circuits/verification_key_" + circuitName + ".json"));
 
@@ -108,6 +115,7 @@ async function main() {
 
     // let calldata = await snarkjs.groth16.exportSolidityCallData(proof, publicSignals);
 
+	/*
 	let calldata = await groth16ExportSolidityCallData(proof, publicSignals);
     console.log(calldata);
 
@@ -124,6 +132,7 @@ async function main() {
 	})
 
 	console.log(response);
+	*/
 
 }
 

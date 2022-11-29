@@ -8,16 +8,22 @@ const fs = require("fs");
 const config = require("./config.json");
 //console.log(config);
 
-const input_A = require("./inputs_A.json");
 
 async function createInputs() {
 
-    const private_consumption = 5678;
+    const private_consumption = 1234;
 
     const eddsa = await buildEddsa();
     const babyJub = await buildBabyjub();
     const F = babyJub.F;
     const msg = F.e(private_consumption);
+
+
+    let r = 0;
+    while (r < 1000) {
+        r = Math.round(Math.random() * 10000000);
+    }
+    console.log("Randomness: " + r);
 
     const prvKey = Buffer.from(config.privateKey, "hex");
 
@@ -28,7 +34,7 @@ async function createInputs() {
 
     chai.assert(eddsa.verifyPoseidon(msg, signature, pubKey));
 
-    const input_B = {
+    const input_A = {
         enabled: 1,
         Ax: F.toObject(pubKey[0]).toString(),
         Ay: F.toObject(pubKey[1]).toString(),
@@ -36,12 +42,12 @@ async function createInputs() {
         R8y: F.toObject(signature.R8[1]).toString(),
         S: signature.S.toString(),
         private_consumption,
-        current_sum: input_A.current_sum + input_A.private_consumption
+        current_sum: r 
     };
 
-    console.log(input_B);
+    console.log(input_A);
 
-    fs.writeFileSync("inputs_B.json", JSON.stringify(input_B, null, 4));
+    fs.writeFileSync("input_A.json", JSON.stringify(input_A, null, 4));
 }
 
 createInputs();

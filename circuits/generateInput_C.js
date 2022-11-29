@@ -8,11 +8,12 @@ const fs = require("fs");
 const config = require("./config.json");
 //console.log(config);
 
-const input_A = require("./inputs_A.json");
+const input_B = require("./inputs_B.json");
+
 
 async function createInputs() {
 
-    const private_consumption = 5678;
+    const private_consumption = 1000;
 
     const eddsa = await buildEddsa();
     const babyJub = await buildBabyjub();
@@ -28,7 +29,7 @@ async function createInputs() {
 
     chai.assert(eddsa.verifyPoseidon(msg, signature, pubKey));
 
-    const input_B = {
+    const input_C = {
         enabled: 1,
         Ax: F.toObject(pubKey[0]).toString(),
         Ay: F.toObject(pubKey[1]).toString(),
@@ -36,12 +37,12 @@ async function createInputs() {
         R8y: F.toObject(signature.R8[1]).toString(),
         S: signature.S.toString(),
         private_consumption,
-        current_sum: input_A.current_sum + input_A.private_consumption
+        current_sum: input_B.current_sum + input_B.private_consumption
     };
 
-    console.log(input_B);
+    console.log(input_C);
 
-    fs.writeFileSync("inputs_B.json", JSON.stringify(input_B, null, 4));
+    fs.writeFileSync("inputs_C.json", JSON.stringify(input_C, null, 4));
 }
 
 createInputs();
