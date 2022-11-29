@@ -5,6 +5,7 @@ pragma solidity ^0.8.17;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+import "./CollateralToken.sol";
 
 interface Verifier_circuit_participants {
     //A->B B->C C->A check the consumption "with the shift"
@@ -37,7 +38,7 @@ interface Verifier_circuit_claim {
 }
 
 contract CollateralBet is Ownable {
-    ERC20Burnable private ERC20BurnableInterface;
+    CollateralToken private ERC20BurnableInterface;
     address public tokenAddress;
     address[] public registeredParticipants;
 
@@ -227,7 +228,7 @@ contract CollateralBet is Ownable {
     function mintTokens(address _playerAddress, uint256 _numberOfTokens)
     internal
     {
-        //ERC20BurnableInterface.mint(_playerAddress, _numberOfTokens);
+        ERC20BurnableInterface.mint(_playerAddress, _numberOfTokens);
     }
 
     function shuffleArray(address[] storage shuffle)
