@@ -100,7 +100,7 @@ async function main() {
 
 	const contractTestingSend = contractTesting.deploy({
 		data: contractTestingMetadata.bytecode,
-		arguments: []
+		arguments: ['0x2d25419E56E101c6fcEcE73087409F0e81ef3FdE']
 	})
 
 	const contractTestingInstance = await contractTestingSend.send({
