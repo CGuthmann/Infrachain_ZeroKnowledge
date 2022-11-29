@@ -14,7 +14,7 @@ interface Verifier_circuit_total{
             uint[2] memory a,
             uint[2][2] memory b,
             uint[2] memory c,
-            uint[3] memory input
+            uint[4] memory input
         ) external view returns (bool r);
 }
 
@@ -45,7 +45,7 @@ contract testing {
             uint[2] memory a,
             uint[2][2] memory b,
             uint[2] memory c,
-            uint[3] memory input)
+            uint[4] memory input)
     public view returns (bool r) {
         
         bool testBool = verifier_circuit_total.verifyProof(a,b,c,input);
