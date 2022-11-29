@@ -1,5 +1,7 @@
 *.log
+*LOG
 
+*.ptau
 
 package-lock.json
 node_modules/
