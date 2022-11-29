@@ -8,7 +8,11 @@
 
 *_js/
 
+input_*.json
+
 verification_key_*
+
+circuits/*.sol
 
 package-lock.json
 node_modules/

@@ -3,23 +3,22 @@ const chai = require("chai");
 const fs = require("fs");
 const config = require("./config.json");
 
-const input_A = require("./inputs_A.json");
-const input_C = require("./inputs_C.json");
+const input_A = require("./input_A.json");
+const input_C = require("./input_C.json");
 
 async function createInputs() {
 
     const private_consumption = 1234;
-    const r = 
 
-    input_total = {
-        "totalSum": input_C.currentSum + input_C.private_consumption,
-        "r": input_A.r,
+    const input_total = {
+        "totalSum": input_C.current_sum + input_C.private_consumption,
+        "r": input_A.current_sum,
         "private_consumption": input_A.private_consumption
     }
 
     console.log(input_total);
 
-    fs.writeFileSync("inputs_total.json", JSON.stringify(input_total, null, 4));
+    fs.writeFileSync("input_total.json", JSON.stringify(input_total, null, 4));
 }
 
 createInputs();
