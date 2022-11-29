@@ -28,10 +28,10 @@ const web3 = new Web3(provider);
 const snarkjs = require("snarkjs");
 const BigNumber = require("bignumber.js");
 
-const input_A = require("./circuits/inputs_A.json");
-const input_B = require("./circuits/inputs_B.json");
-const input_C = require("./circuits/inputs_C.json");
-const input_total = require("./circuits/inputs_total.json")
+const input_A = require("./circuits/input_A.json");
+const input_B = require("./circuits/input_B.json");
+const input_C = require("./circuits/input_C.json");
+const input_total = require("./circuits/input_total.json")
 
 const account = config.account
 
@@ -52,8 +52,8 @@ async function groth16ExportSolidityCallData(proof, pub) {
 
 	let P;
 	P = [[p256(proof.pi_a[0]), p256(proof.pi_a[1])],
-		[[p256(proof.pi_b[0][1]), p256(proof.pi_b[0][0])], [p256(proof.pi_b[1][1]), p256(proof.pi_b[1][0])]],
-		[p256(proof.pi_c[0]), p256(proof.pi_c[1])],
+	[[p256(proof.pi_b[0][1]), p256(proof.pi_b[0][0])], [p256(proof.pi_b[1][1]), p256(proof.pi_b[1][0])]],
+	[p256(proof.pi_c[0]), p256(proof.pi_c[1])],
 		inputs
 	];
 	return P;
@@ -62,62 +62,82 @@ async function groth16ExportSolidityCallData(proof, pub) {
 
 async function main() {
 
-    console.log(config.account);
+	console.log(config.account);
 
-    const signer = await web3.eth.accounts.privateKeyToAccount("22aae6e36021acbf8d4a05a169d77919929d390dab212c609c319ea99c4dd298")
-    console.log(account);
-    web3.eth.accounts.wallet.add(signer);
+	const signer = await web3.eth.accounts.privateKeyToAccount("22aae6e36021acbf8d4a05a169d77919929d390dab212c609c319ea99c4dd298")
+	console.log(account);
+	web3.eth.accounts.wallet.add(signer);
 
-    const balance = await web3.eth.getBalance(config.account);
-    console.log("balance", web3.utils.fromWei(balance, "ether"));
+	const balance = await web3.eth.getBalance(config.account);
+	console.log("balance", web3.utils.fromWei(balance, "ether"));
 
-    let rawdata = fs.readFileSync('build/contracts/Verifier_Participants.json');
-    let metadata = JSON.parse(rawdata);
-    // console.log(metadata);
+	let rawdata = fs.readFileSync('build/contracts/Verifier_Participants.json');
+	let metadata = JSON.parse(rawdata);
+	// console.log(metadata);
 
-    const contract = new web3.eth.Contract(metadata.abi);
-    // console.log(contract);
+	const contract = new web3.eth.Contract(metadata.abi);
+	// console.log(contract);
 
-    const contractSend = contract.deploy({
-        data: metadata.bytecode,
-        arguments: []
-    })
+	const contractSend = contract.deploy({
+		data: metadata.bytecode,
+		arguments: []
+	})
 
-    const newContractInstance = await contractSend.send({
-        from: config.account,
-        gas: 1500000
-    })
+	const newContractInstance = await contractSend.send({
+		from: config.account,
+		gas: 1500000
+	})
 
-    console.log(newContractInstance._address);
+	console.log(newContractInstance._address);
 
 	// console.log(newContractInstance);
 
 	// fs.writeFileSync("./contractAddress", newContractInstance._address);
 
-	for (let inputs in Enumerator([input_A, input_B, input_C])) {
+	for (let inputs of [input_A, input_B, input_C]) {
 
-	const { proof, publicSignals } = await snarkjs.groth16.fullProve(inputs, "circuits/circuit_participant_js/participant.wasm", "circuits/parcitipant_0001.zkey");
+		const { proof, publicSignals } = await snarkjs.groth16.fullProve(inputs, "circuits/circuit_participant_js/circuit_participant.wasm", "circuits/circuit_participant_0001.zkey");
 
-    console.log("Proof: ");
-    console.log(JSON.stringify(proof, null, 1));
+		// console.log("Proof: ");
+		// console.log(JSON.stringify(proof, null, 1));
+
+		console.log("Public: ");
+		console.log(JSON.stringify(publicSignals, null, 1));
+
+		const vKey = JSON.parse(fs.readFileSync("circuits/verification_key_circuit_participant.json"));
+
+		const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
+
+		if (res === true) {
+			console.log("Verification OK");
+		} else {
+			console.log("Invalid proof");
+		}
+
 
 	}
 
-    const vKey = JSON.parse(fs.readFileSync("circuits/verification_key_" + circuitName + ".json"));
+	const { proof, publicSignals } = await snarkjs.groth16.fullProve(input_total, "circuits/circuit_total_js/circuit_total.wasm", "circuits/circuit_total_0001.zkey");
 
-    const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
+	console.log("Public: ");
+	console.log(JSON.stringify(publicSignals, null, 1));
 
-    if (res === true) {
-        console.log("Verification OK");
-    } else {
-        console.log("Invalid proof");
-    }
 
-    // let calldata = await snarkjs.groth16.exportSolidityCallData(proof, publicSignals);
+	const vKey = JSON.parse(fs.readFileSync("circuits/verification_key_circuit_total.json"));
+
+	const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
+
+	if (res === true) {
+		console.log("Verification OK");
+	} else {
+		console.log("Invalid proof");
+	}
+
+	// let calldata = await snarkjs.groth16.exportSolidityCallData(proof, publicSignals);
 
 	/*
 	let calldata = await groth16ExportSolidityCallData(proof, publicSignals);
-    console.log(calldata);
+	console.log(calldata);
 
 	console.log(calldata[0]);
 	console.log(calldata[1]);

@@ -13,20 +13,19 @@ template ZKP_MPC_Total() {
 
     signal output comPrivateConsumption;
     comPrivateConsumption <== hasherPrivateConsumption.out;
-
-
-    component hasherRa = Poseidon(1);
-    hasherRa.inputs[0] <== r + private_consumption;
-
-    signal output comRa;
-    comRa <== hasherRa.out;
-
     
-    component hasherTotalSum = Poseidon(1);
-    hasherTotalSum.inputs[0] <== totalSum;
+    component hasherInitialSum = Poseidon(1);
+    hasherInitialSum.inputs[0] <== totalSum;
 
-    signal output comTotalSum;
-    comTotalSum  <== hasherTotalSum.out;
+    signal output comInitialSum;
+    comInitialSum <== hasherInitialSum.out;
+
+    component hasherCurrentSum = Poseidon(1);
+    hasherCurrentSum.inputs[0] <== private_consumption + r;
+
+    signal output comCurrentSum;
+    comCurrentSum <== hasherCurrentSum.out;
+
 
     signal output total;
     total <== totalSum - r; 

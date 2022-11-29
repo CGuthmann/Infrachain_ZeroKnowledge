@@ -20,7 +20,7 @@ pragma circom 2.0.6;
 
 include "../node_modules/circomlib/circuits/poseidon.circom";
 include "./EdDSAPoseidonVerifier.circom";
-
+include "../node_modules/circomlib/circuits/comparators.circom";
 
 template ZKP_MPC_A() {
 
@@ -45,6 +45,11 @@ template ZKP_MPC_A() {
     signal input private_consumption;
     //log("M: ", M);
 
+    component compCur = LessThan(64);
+    compCur.in[0] <== current_sum;
+    compCur.in[1] <== 100000000000000;
+    compCur.out === 1;
+
     component signatureVerifier = EdDSAPoseidonVerifier();
     signatureVerifier.enabled <== enabled;
     signatureVerifier.Ax <== Ax;
@@ -63,12 +68,19 @@ template ZKP_MPC_A() {
 
     comPrivateConsumption <== hasherPrivateConsumption.out;
 
-    signal output comCurrentSum;
+    signal output comSumBefore;
 
-    component hasherCurrentSum = Poseidon(1);
-    hasherCurrentSum.inputs[0] <== current_sum + private_consumption;
+    component hasherSumBefore = Poseidon(1);
+    hasherSumBefore.inputs[0] <== current_sum;
 
-    comCurrentSum <== hasherCurrentSum.out;
+    comSumBefore <== hasherSumBefore.out;
+
+    signal output comSumAfter;
+
+    component hasherSumAfter = Poseidon(1);
+    hasherSumAfter.inputs[0] <== current_sum + private_consumption;
+
+    comSumAfter <== hasherSumAfter.out;
 
 }
 

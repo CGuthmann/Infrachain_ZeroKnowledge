@@ -8,7 +8,7 @@ const fs = require("fs");
 const config = require("./config.json");
 //console.log(config);
 
-const input_B = require("./inputs_B.json");
+const input_B = require("./input_B.json");
 
 
 async function createInputs() {
@@ -42,7 +42,7 @@ async function createInputs() {
 
     console.log(input_C);
 
-    fs.writeFileSync("inputs_C.json", JSON.stringify(input_C, null, 4));
+    fs.writeFileSync("input_C.json", JSON.stringify(input_C, null, 4));
 }
 
 createInputs();
