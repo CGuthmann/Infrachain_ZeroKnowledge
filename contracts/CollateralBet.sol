@@ -103,7 +103,7 @@ contract CollateralBet is Ownable {
         uint256 residuum = length % 3;
         if (residuum != 0) {
             for (uint256 i = length - 1; i < length - residuum; i--) {
-                mintTokens(_unprocessedArray[i], 1);
+                // mintTokens(_unprocessedArray[i], 1);
                 delete _unprocessedArray[i];
             }
         }
@@ -131,11 +131,13 @@ contract CollateralBet is Ownable {
         ERC20BurnableInterface.burn(ERC20BurnableInterface.balanceOf(address(this)));
     }
 
+    /*
     function mintTokens(address _playerAddress, uint256 _numberOfTokens)
     internal
     {
         ERC20BurnableInterface.mint(_playerAddress, _numberOfTokens);
     }
+    */
 
     function shuffleArray(address[] storage shuffle)
     internal

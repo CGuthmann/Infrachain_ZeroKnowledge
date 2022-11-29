@@ -8,3 +8,4 @@ truffle build --reset
 echo "Running some sample transactions"
 
 node test.js
+node sendProof.js

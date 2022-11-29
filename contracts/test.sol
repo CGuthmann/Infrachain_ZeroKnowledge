@@ -75,4 +75,17 @@ contract testing {
         
         return testBool;
     }
+
+    function step1(
+            uint[2] memory a,
+            uint[2][2] memory b,
+            uint[2] memory c,
+            uint[3] memory input)
+    public view returns (bool r) {
+        
+        uint comA = input[0]; 
+        uint comR = input[1];
+        uint comAR = input[2];
+
+    }
 }

@@ -36,7 +36,7 @@ const input_total = require("./circuits/input_total.json")
 const account = config.account;
 
 const addressContract = Buffer.from(fs.readFileSync("testContractAddress")).toString();
-console.log(addressContract);
+//console.log(addressContract);
 
 function p256(n) {
 	let nstr = new BigNumber(n).toString(16);
@@ -74,27 +74,28 @@ async function main() {
 	console.log(contractTest);
 	*/
 
-	const signer = await web3.eth.accounts.privateKeyToAccount("22aae6e36021acbf8d4a05a169d77919929d390dab212c609c319ea99c4dd298")
+	const signer = await web3.eth.accounts.privateKeyToAccount("2b8ee2ed697e010f3ab2c1cedec3e78a067a99cc92f0d352008d3e71fd2c58da")
+	console.log(signer);
 	console.log(account);
 	web3.eth.accounts.wallet.add(signer);
 
 	const artifact = require("./build/contracts/testing.json");
 
-	console.log(artifact.abi);
-	console.log(addressContract);
+	// console.log(artifact.abi);
+	// console.log(addressContract);
 
 	const testContractInstance = new web3.eth.Contract(
 		artifact.abi,
 		addressContract
 	)
 
-	console.log(testContractInstance);
+	// console.log(testContractInstance);
 
 	const { proof, publicSignals } = await snarkjs.groth16.fullProve(input_total, "circuits/circuit_total_js/circuit_total.wasm", "circuits/circuit_total_0001.zkey");
 
 
-	console.log("Public: ");
-	console.log(JSON.stringify(publicSignals, null, 1));
+	// console.log("Public: ");
+	// console.log(JSON.stringify(publicSignals, null, 1));
 
 
 	const vKey = JSON.parse(fs.readFileSync("circuits/verification_key_circuit_total.json"));
@@ -108,7 +109,7 @@ async function main() {
 	}
 	
 	let calldata = await groth16ExportSolidityCallData(proof, publicSignals);
-	console.log(calldata);
+	// console.log(calldata);
 
 	
 	let response = await testContractInstance.methods.tst_total(calldata[0], calldata[1], calldata[2],
@@ -119,7 +120,7 @@ async function main() {
 		console.log(err);
 	})
 
-	console.log(response);
+	// console.log(response);
 	
 }
 
