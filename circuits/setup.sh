@@ -40,6 +40,6 @@ echo "Setup took $DIFF seconds"
 snarkjs zkey export solidityverifier "$CIRCUIT_NAME"_0001.zkey verifier_$CIRCUIT_NAME.sol
 
 sed -i -e 's/pragma solidity ^0.6.11;/pragma solidity ^0.8.17;/g' verifier_$CIRCUIT_NAME.sol
-sed -i -e 's/contract Verifier {/contract Verifier_Participants {/g' verifier_$CIRCUIT_NAME.sol
+sed -i -e 's/contract Verifier {/contract Verifier_'$CIRCUIT_NAME' {/g' verifier_$CIRCUIT_NAME.sol
 
 cp verifier_$CIRCUIT_NAME.sol ../contracts

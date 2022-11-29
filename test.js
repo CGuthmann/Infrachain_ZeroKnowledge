@@ -71,35 +71,68 @@ async function main() {
 	const balance = await web3.eth.getBalance(config.account);
 	console.log("balance", web3.utils.fromWei(balance, "ether"));
 
-	let rawdata = fs.readFileSync('build/contracts/Verifier_Participants.json');
-	let metadata = JSON.parse(rawdata);
+	let contractParticipantVerifierRawdata = fs.readFileSync('build/contracts/Verifier_circuit_participant.json');
+	let contractParticipantVerifierMetadata = JSON.parse(contractParticipantVerifierRawdata);
 	// console.log(metadata);
 
-	const contract = new web3.eth.Contract(metadata.abi);
+	const contractParticipantVerifier = new web3.eth.Contract(contractParticipantVerifierMetadata.abi);
 	// console.log(contract);
 
-	const contractSend = contract.deploy({
-		data: metadata.bytecode,
+	const contractParticipantVerifierSend = contractParticipantVerifier.deploy({
+		data: contractParticipantVerifierMetadata.bytecode,
 		arguments: []
 	})
 
-	const newContractInstance = await contractSend.send({
+	const contractParticipantVerifierInstance = await contractParticipantVerifierSend.send({
 		from: config.account,
-		gas: 1500000
+		gas: 3500000
 	})
 
-	console.log(newContractInstance._address);
+	console.log(contractParticipantVerifierInstance._address);
 
-	// console.log(newContractInstance);
+	//let calldata = await snarkjs.groth16.exportSolidityCallData(proof, publicSignals);
+	let contractTestingRawdata = fs.readFileSync('build/contracts/testing.json');
+	let contractTestingMetadata = JSON.parse(contractTestingRawdata);
+	// console.log(metadata);
 
-	// fs.writeFileSync("./contractAddress", newContractInstance._address);
+	const contractTesting = new web3.eth.Contract(contractTestingMetadata.abi);
+	// console.log(contract);
+
+	const contractTestingSend = contractTesting.deploy({
+		data: contractTestingMetadata.bytecode,
+		arguments: []
+	})
+
+	const contractTestingInstance = await contractTestingSend.send({
+		from: config.account,
+		gas: 3500000
+	})
+
+	let contractTotalVerifierRawdata = fs.readFileSync('build/contracts/Verifier_circuit_total.json');
+	let contractTotalVerifierMetadata = JSON.parse(contractTotalVerifierRawdata);
+	// console.log(metadata);
+
+	const contractTotalVerifier = new web3.eth.Contract(contractTotalVerifierMetadata.abi);
+	// console.log(contract);
+
+	const contractTotalVerifierSend = contractTotalVerifier.deploy({
+		data: contractTotalVerifierMetadata.bytecode,
+		arguments: []
+	})
+
+	const contractTotalVerifierInstance = await contractTotalVerifierSend.send({
+		from: config.account,
+		gas: 3500000
+	})
+
+	console.log(contractTotalVerifierInstance._address);
 
 	for (let inputs of [input_A, input_B, input_C]) {
 
 		const { proof, publicSignals } = await snarkjs.groth16.fullProve(inputs, "circuits/circuit_participant_js/circuit_participant.wasm", "circuits/circuit_participant_0001.zkey");
 
-		// console.log("Proof: ");
-		// console.log(JSON.stringify(proof, null, 1));
+		console.log("Proof: ");
+		console.log(JSON.stringify(proof, null, 1));
 
 		console.log("Public: ");
 		console.log(JSON.stringify(publicSignals, null, 1));
@@ -107,6 +140,28 @@ async function main() {
 		const vKey = JSON.parse(fs.readFileSync("circuits/verification_key_circuit_participant.json"));
 
 		const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
+		
+		// console.log(newContractInstance);
+
+	// fs.writeFileSync("./contractAddress", newContractInstance._address);
+
+	
+
+	console.log(contractTestingInstance._address);
+	
+	let calldata = await groth16ExportSolidityCallData(proof, publicSignals);
+	console.log(calldata);
+
+
+	let response = await contractTestingInstance.methods.tst(calldata[0], calldata[1], calldata[2],
+		 calldata[3]).send({
+		from: config.account,
+		gas: 4000000
+	}).catch(err => {
+		console.log(err);
+	})
+
+	console.log(response);
 
 		if (res === true) {
 			console.log("Verification OK");
@@ -114,10 +169,11 @@ async function main() {
 			console.log("Invalid proof");
 		}
 
-
 	}
 
+	/*
 	const { proof, publicSignals } = await snarkjs.groth16.fullProve(input_total, "circuits/circuit_total_js/circuit_total.wasm", "circuits/circuit_total_0001.zkey");
+
 
 	console.log("Public: ");
 	console.log(JSON.stringify(publicSignals, null, 1));
@@ -132,10 +188,28 @@ async function main() {
 	} else {
 		console.log("Invalid proof");
 	}
-
-	// let calldata = await snarkjs.groth16.exportSolidityCallData(proof, publicSignals);
-
+	*/
 	/*
+	//let calldata = await snarkjs.groth16.exportSolidityCallData(proof, publicSignals);
+	let rawdataNew = fs.readFileSync('build/contracts/testing.json');
+	let metadataNew = JSON.parse(rawdataNew);
+	// console.log(metadata);
+
+	const contractNew = new web3.eth.Contract(metadataNew.abi);
+	// console.log(contract);
+
+	const contractSendNew = contractNew.deploy({
+		data: metadataNew.bytecode,
+		arguments: []
+	})
+
+	const newContractInstanceNew = await contractSendNew.send({
+		from: config.account,
+		gas: 3500000
+	})
+
+	console.log(newContractInstanceNew._address);
+	
 	let calldata = await groth16ExportSolidityCallData(proof, publicSignals);
 	console.log(calldata);
 
@@ -144,16 +218,16 @@ async function main() {
 	console.log(calldata[2]);
 	console.log(calldata[3]);
 
-	let response = await newContractInstance.methods.verifyProof(calldata[0], calldata[1], calldata[2], calldata[3]).send({
+	let response = await newContractInstancenew.methods.tst(calldata[0], calldata[1], calldata[2], calldata[3],newContractInstance._address).send({
 		from: config.account,
-		gas: 1000000
+		gas: 4000000
 	}).catch(err => {
 		console.log(err);
 	})
 
 	console.log(response);
-	*/
-
+	
+*/
 }
 
 main();
