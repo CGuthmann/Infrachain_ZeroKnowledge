@@ -66,7 +66,7 @@ async function main() {
     const balance = await web3.eth.getBalance(config.account);
     console.log("balance", web3.utils.fromWei(balance, "ether"));
 
-    let rawdata = fs.readFileSync('build/contracts/Verifier_A.json');
+    let rawdata = fs.readFileSync('build/contracts/Verifier_Participant.json');
     let metadata = JSON.parse(rawdata);
     // console.log(metadata);
 
@@ -89,12 +89,12 @@ async function main() {
 
 	// fs.writeFileSync("./contractAddress", newContractInstance._address);
 
-	const { proof, publicSignals } = await snarkjs.groth16.fullProve(inputs, "circuits/circuit_A_js/circuit_A.wasm", "circuits/circuit_A_0001.zkey");
+	const { proof, publicSignals } = await snarkjs.groth16.fullProve(inputs, "circuits/circuit_participant_js/circuit_participant.wasm", "circuits/circuit_participant_0001.zkey");
 
     console.log("Proof: ");
     console.log(JSON.stringify(proof, null, 1));
 
-    const vKey = JSON.parse(fs.readFileSync("circuits/verification_key_circuit_A.json"));
+    const vKey = JSON.parse(fs.readFileSync("circuits/verification_key_circuit_participant.json"));
 
     const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
 

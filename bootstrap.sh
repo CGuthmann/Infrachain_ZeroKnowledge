@@ -1,9 +1,8 @@
 #!/bin/bash
 
 cd circuits 
-bootstrap.sh A 
-bootstrap.sh B
-bootstrap.sh C
+./bootstrap.sh A
+cd ..
 
 truffle build --reset
 
