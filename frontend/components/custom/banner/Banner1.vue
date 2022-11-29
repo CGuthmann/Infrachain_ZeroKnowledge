@@ -67,7 +67,7 @@
                 <div>
                   <v-btn color="error" class="btn-custom-lg btn-arrow mt-10" large rounded @click="depositToken"
                     elevation="0">
-                    <span>Deposit Token and start serious game</span>
+                    <span>Deposit Token and start competition</span>
                     <i class=" mdi mdi-arrow-right"></i>
                   </v-btn>
                   <v-progress-circular class="circular-loading" v-if="loadingDepositToken" indeterminate
@@ -103,12 +103,12 @@
                 <h5 class="font-weight-medium font-18">Not enough tokens available for participation</h5>
                 <p class="mt-10 mb-8">
                   You need to provide one token as a deposit (no fee!) for the competition. As you don't have sufficient
-                  funds you need to
+                  funds you are allowed to claim one initial token
                 </p>
                 <div>
                   <v-btn color="error" class="btn-custom-lg btn-arrow mt-10" large rounded @click="depositToken"
                     elevation="0">
-                    <span>Deposit Token and start serious game</span>
+                    <span>Claim Token and start competition</span>
                     <i class=" mdi mdi-arrow-right"></i>
                   </v-btn>
                   <v-progress-circular class="circular-loading" v-if="loadingDepositToken" indeterminate
