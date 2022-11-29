@@ -28,38 +28,35 @@ const account = config.account
 
 const artifact = require("./build/contracts/HelloWorld.json");
 
-async function main(){
+async function main() {
 
-	console.log(config.account);
+    console.log(config.account);
 
-	console.log(await web3.eth.accounts.privateKeyToAccount("22aae6e36021acbf8d4a05a169d77919929d390dab212c609c319ea99c4dd298"));
+    const signer = await web3.eth.accounts.privateKeyToAccount("22aae6e36021acbf8d4a05a169d77919929d390dab212c609c319ea99c4dd298")
+    console.log(account);
+    web3.eth.accounts.wallet.add(signer);
 
-	const accounts = await web3.eth.getAccounts();
-	console.log(accounts);
-
-	const balance = await web3.eth.getBalance(config.account);
+    const balance = await web3.eth.getBalance(config.account);
     console.log("balance", web3.utils.fromWei(balance, "ether"));
 
-	let rawdata = fs.readFileSync('build/contracts/HelloWorld.json');
+    let rawdata = fs.readFileSync('build/contracts/HelloWorld.json');
     let metadata = JSON.parse(rawdata);
-	//console.log(metadata);
+    // console.log(metadata);
 
-	const contract = new web3.eth.Contract(metadata.abi);
-	//console.log(contract);
+    const contract = new web3.eth.Contract(metadata.abi);
+    // console.log(contract);
 
-	const contractSend = contract.deploy({
+    const contractSend = contract.deploy({
         data: metadata.bytecode,
         arguments: []
     })
 
-	const newContractInstance = await contractSend.send({
-        from:  config.account,
+    const newContractInstance = await contractSend.send({
+        from: config.account,
         gas: 1500000
     })
 
-	console.log(newContractInstance);
-
-
+    console.log(newContractInstance);
 }
 
 /*
