@@ -1,6 +1,8 @@
 {
   "dependencies": {
+    "bignumber": "^1.1.0",
     "circomlib": "^2.0.5",
+    "snarkjs": "^0.5.0",
     "truffle-contract": "^4.0.31",
     "web3": "^1.8.1"
   }

@@ -1,10 +1,17 @@
 *.log
 *LOG
 
+*.sym
+*.r1cs
 *.ptau
 *.zkey
+
+*_js/
 
 verification_key_*
 
 package-lock.json
 node_modules/
+
+build/contracts/
+contracts/

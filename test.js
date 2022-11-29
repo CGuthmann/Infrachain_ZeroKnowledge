@@ -23,10 +23,37 @@ const Contract = require("web3-eth-contract");
 const TruffleContract = require("truffle-contract");
 const provider = new Web3.providers.HttpProvider(config.node);
 const web3 = new Web3(provider);
+const snarkjs = require("snarkjs");
+const BigNumber = require("bignumber.js");
+
+const inputs = require("./circuits/input_circuit_A.json");
 
 const account = config.account
 
-const artifact = require("./build/contracts/HelloWorld.json");
+function p256(n) {
+	let nstr = new BigNumber(n).toString(16);
+	while (nstr.length < 64) nstr = '0' + nstr;
+	nstr = '0x' + nstr;
+	return nstr;
+}
+
+// largely copied from https://raw.githubusercontent.com/iden3/snarkjs/0c0334179879cab4b3ce3eebb019462d8173f418/build/snarkjs.js
+async function groth16ExportSolidityCallData(proof, pub) {
+	let inputs = [];
+	for (let i = 0; i < pub.length; i++) {
+		if (inputs != [])
+			inputs.push(p256(pub[i]));
+	}
+
+	let P;
+	P = [[p256(proof.pi_a[0]), p256(proof.pi_a[1])],
+		[[p256(proof.pi_b[0][1]), p256(proof.pi_b[0][0])], [p256(proof.pi_b[1][1]), p256(proof.pi_b[1][0])]],
+		[p256(proof.pi_c[0]), p256(proof.pi_c[1])],
+		inputs
+	];
+	return P;
+}
+
 
 async function main() {
 
@@ -39,7 +66,7 @@ async function main() {
     const balance = await web3.eth.getBalance(config.account);
     console.log("balance", web3.utils.fromWei(balance, "ether"));
 
-    let rawdata = fs.readFileSync('build/contracts/HelloWorld.json');
+    let rawdata = fs.readFileSync('build/contracts/Verifier_A.json');
     let metadata = JSON.parse(rawdata);
     // console.log(metadata);
 
@@ -56,36 +83,46 @@ async function main() {
         gas: 1500000
     })
 
-    console.log(newContractInstance);
-}
+    console.log(newContractInstance._address);
 
-/*
+	// console.log(newContractInstance);
 
-const instance = new web3.eth.Contract(artifact.abi, artifact.networks['10'].address);
-//console.log(artifact.networks['10'].address);
+	// fs.writeFileSync("./contractAddress", newContractInstance._address);
 
-async function createPrescription(id) {
+	const { proof, publicSignals } = await snarkjs.groth16.fullProve(inputs, "circuits/circuit_A_js/circuit_A.wasm", "circuits/circuit_A_0001.zkey");
 
-	let adminAccount = await web3.eth.getAccounts().catch(err => {
+    console.log("Proof: ");
+    console.log(JSON.stringify(proof, null, 1));
+
+    const vKey = JSON.parse(fs.readFileSync("circuits/verification_key_circuit_A.json"));
+
+    const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
+
+    if (res === true) {
+        console.log("Verification OK");
+    } else {
+        console.log("Invalid proof");
+    }
+
+    // let calldata = await snarkjs.groth16.exportSolidityCallData(proof, publicSignals);
+
+	let calldata = await groth16ExportSolidityCallData(proof, publicSignals);
+    console.log(calldata);
+
+	console.log(calldata[0]);
+	console.log(calldata[1]);
+	console.log(calldata[2]);
+	console.log(calldata[3]);
+
+	let response = await newContractInstance.methods.verifyProof(calldata[0], calldata[1], calldata[2], calldata[3]).send({
+		from: config.account,
+		gas: 1000000
+	}).catch(err => {
 		console.log(err);
-	});
-	//console.log("Admin account: " + adminAccount);
+	})
 
-	let patientAccount = await web3.eth.accounts.create("Hallo");
-	let prescriptionPrivateKey = patientAccount.privateKey;
-	//console.log("Patient Account: " + patientAccount.address);
-	//console.log("Patient Account private key: " + patientAccount.privateKey);
-	//console.log(typeof(patientAccount.address));
-	//console.log(typeof(adminAccount));
-	let returnValue = await instance.methods.create(patientAccount.address, id).send({
-		from: adminAccount.toString(),
-		gas: 300000
-	}).catch(err => {return Promise.reject(err)});
-	//console.log(returnValue);
-        console.log(prescriptionPrivateKey);
-	return;
-};
-*/
+	console.log(response);
 
+}
 
 main();
