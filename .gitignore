@@ -13,8 +13,11 @@ input_*.json
 verification_key_*
 
 circuits/*.sol
-devnet/
+
 package-lock.json
 node_modules/
+devnet/
 build/contracts/
 contracts/verifier*.sol
+
+devnet/
