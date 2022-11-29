@@ -22,6 +22,7 @@ START=$(date +%s.%N)
 snarkjs groth16 setup $CIRCUIT_NAME.r1cs ../powersOfTau28_hez_final_16.ptau "$CIRCUIT_NAME"_0000.zkey
 snarkjs zkey contribute "$CIRCUIT_NAME"_0000.zkey "$CIRCUIT_NAME"_0001.zkey --name="1st Contributor Name" -v --entropy="Hallo"
 snarkjs zkey export verificationkey "$CIRCUIT_NAME"_0001.zkey verification_key_$CIRCUIT_NAME.json
+rm "$CIRCUIT_NAME"_0000.zkey
 END=$(date +%s.%N)
 DIFF=$(echo "$END - $START" | bc)
 echo "Setup took $DIFF seconds"
