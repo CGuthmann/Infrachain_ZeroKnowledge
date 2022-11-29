@@ -2,6 +2,9 @@
 *LOG
 
 *.ptau
+*.zkey
+
+verification_key_*
 
 package-lock.json
 node_modules/

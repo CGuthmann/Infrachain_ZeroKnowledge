@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "chai": "^4.3.6",
+    "circom_tester": "^0.0.18",
+    "circomlibjs": "^0.1.7",
+    "describe": "^1.2.0",
+    "json-bigint-patch": "^0.0.8"
+  }
+}
