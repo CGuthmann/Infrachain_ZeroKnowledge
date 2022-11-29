@@ -106,16 +106,39 @@ async function main() {
 		arguments: []
 	})
 
-	console.log("Sending total verifier")
 	const contractTotalVerifierInstance = await contractTotalVerifierSend.send({
 		from: config.account,
-		gas: 4000000
+		gas: 4000005
 	})
 
 	console.log(contractTotalVerifierInstance._address);
 
 	
 
+	await new Promise(r => setTimeout(r, 15000));
+
+	
+
+	let contractClaimVerifierRawdata = fs.readFileSync('build/contracts/Verifier_circuit_claim.json');
+	let contractClaimVerifierMetadata = JSON.parse(contractClaimVerifierRawdata);
+	// console.log(metadata);
+
+	const contractClaimVerifier = new web3.eth.Contract(contractClaimVerifierMetadata.abi);
+	// console.log(contract);
+
+	const contractClaimVerifierSend = contractClaimVerifier.deploy({
+		data: contractClaimVerifierMetadata.bytecode,
+		arguments: []
+	})
+
+	const contractClaimVerifierInstance = await contractClaimVerifierSend.send({
+		from: config.account,
+		gas: 4000005
+	})
+
+	console.log(contractClaimVerifierInstance._address);
+
+	await new Promise(r => setTimeout(r, 15000));
 
 
 	//let calldata = await snarkjs.groth16.exportSolidityCallData(proof, publicSignals);
@@ -129,7 +152,7 @@ async function main() {
 	const contractTestingSend = contractTesting.deploy({
 		data: contractTestingMetadata.bytecode,
 		arguments: [contractParticipantVerifierInstance._address,
-			contractTotalVerifierInstance._address,contractParticipantVerifierInstance._address]
+			contractTotalVerifierInstance._address,contractClaimVerifierInstance._address]
 	})
 
 	const contractTestingInstance = await contractTestingSend.send({
@@ -168,7 +191,7 @@ async function main() {
 		let response = await contractTestingInstance.methods.tst(calldata[0], calldata[1], calldata[2],
 			calldata[3]).send({
 			from: config.account,
-			gas: 4000000
+			gas: 4000005
 		}).catch(err => {
 			console.log(err);
 		})
@@ -208,52 +231,13 @@ async function main() {
 	let response = await contractTestingInstance.methods.tst_total(calldata[0], calldata[1], calldata[2],
 		 calldata[3]).send({
 		from: config.account,
-		gas: 4000000
+		gas: 4000005
 	}).catch(err => {
 		console.log(err);
 	})
 
 	console.log(response);
 	
-	/*
-	//let calldata = await snarkjs.groth16.exportSolidityCallData(proof, publicSignals);
-	let rawdataNew = fs.readFileSync('build/contracts/testing.json');
-	let metadataNew = JSON.parse(rawdataNew);
-	// console.log(metadata);
-
-	const contractNew = new web3.eth.Contract(metadataNew.abi);
-	// console.log(contract);
-
-	const contractSendNew = contractNew.deploy({
-		data: metadataNew.bytecode,
-		arguments: []
-	})
-
-	const newContractInstanceNew = await contractSendNew.send({
-		from: config.account,
-		gas: 3500000
-	})
-
-	console.log(newContractInstanceNew._address);
-	
-	let calldata = await groth16ExportSolidityCallData(proof, publicSignals);
-	console.log(calldata);
-
-	console.log(calldata[0]);
-	console.log(calldata[1]);
-	console.log(calldata[2]);
-	console.log(calldata[3]);
-
-	let response = await newContractInstancenew.methods.tst(calldata[0], calldata[1], calldata[2], calldata[3],newContractInstance._address).send({
-		from: config.account,
-		gas: 4000000
-	}).catch(err => {
-		console.log(err);
-	})
-
-	console.log(response);
-	
-*/
 }
 
 main();
