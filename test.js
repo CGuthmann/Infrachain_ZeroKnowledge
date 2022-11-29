@@ -66,7 +66,7 @@ async function main() {
     const balance = await web3.eth.getBalance(config.account);
     console.log("balance", web3.utils.fromWei(balance, "ether"));
 
-    let rawdata = fs.readFileSync('build/contracts/Verifier_Participant.json');
+    let rawdata = fs.readFileSync('build/contracts/Verifier_Participants.json');
     let metadata = JSON.parse(rawdata);
     // console.log(metadata);
 
