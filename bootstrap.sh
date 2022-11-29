@@ -27,8 +27,7 @@ truffle init
 echo "Preparing the ZKP trusted setups and deploying the corresponding verifiers"
 cd circuits 
 ./bootstrap.sh A
-./bootstrap.sh B
-./bootstrap.sh C
+cd ..
 
 truffle build --reset
 
