@@ -16,13 +16,13 @@
     You should have received a copy of the GNU General Public License
     along with circom. If not, see <https://www.gnu.org/licenses/>.
 */
-pragma circom 2.1.0;
+pragma circom 2.0.6;
 
-include "../../circomlib/circuits/compconstant.circom";
-include "../../circomlib/circuits/poseidon.circom";
-include "../../circomlib/circuits/bitify.circom";
-include "../../circomlib/circuits/escalarmulany.circom";
-include "../../circomlib/circuits/escalarmulfix.circom";
+include "../node_modules/circomlib/circuits/compconstant.circom";
+include "../node_modules/circomlib/circuits/poseidon.circom";
+include "../node_modules/circomlib/circuits/bitify.circom";
+include "../node_modules/circomlib/circuits/escalarmulany.circom";
+include "../node_modules/circomlib/circuits/escalarmulfix.circom";
 
 template EdDSAPoseidonVerifier() {
     signal input enabled;
@@ -176,6 +176,7 @@ template ZKP_MPC_A() {
     let hasherRa = Poseidon(1);
     hasherRa.in[0] <== r + a;
 
+    comRa <== hasherRa.out;
 }
 
 component main = ZKP_MPC_A();
