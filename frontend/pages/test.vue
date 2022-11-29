@@ -12,7 +12,7 @@
                                 Check your current energy consumption
                             </h2>
                             <p>
-                                You can see realtime data of your smart meter running in your house
+                                You can see realtime data of your smart meter running in your building
                                 <!-- You can relay on our amazing features list and also our customer
                                 services will be great experience for you without doubt and in
                                 no-time -->
@@ -38,7 +38,6 @@
                 </v-row>
             </v-container>
         </div>
-        <Pricing />
 
         <!-- <v-btn @click="update">Update</v-btn> -->
 
@@ -72,9 +71,7 @@ export default {
             }
         }
     },
-    components: {
-        Pricing: () => import("@/components/custom/pricing/Pricing"),
-    },
+
     methods: {
         update() {
             const currentDate = new Date().toLocaleTimeString('en-GB', {
