@@ -56,19 +56,19 @@ template ZKP_MPC_A() {
 
     signatureVerifier.out === 1;
 
-    signal output comR;
+    signal output comPrivateConsumption;
 
-    component hasherR = Poseidon(1);
-    hasherR.inputs[0] <== private_consumption;
+    component hasherPrivateConsumption = Poseidon(1);
+    hasherPrivateConsumption.inputs[0] <== private_consumption;
 
-    comR <== hasherR.out;
+    comPrivateConsumption <== hasherPrivateConsumption.out;
 
-    signal output comRa;
+    signal output comCurrentSum;
 
-    component hasherRa = Poseidon(1);
-    hasherRa.inputs[0] <== current_sum + private_consumption;
+    component hasherCurrentSum = Poseidon(1);
+    hasherCurrentSum.inputs[0] <== current_sum + private_consumption;
 
-    comRa <== hasherRa.out;
+    comCurrentSum <== hasherCurrentSum.out;
 
 }
 

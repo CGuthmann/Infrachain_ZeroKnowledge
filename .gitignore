@@ -15,3 +15,5 @@ node_modules/
 devnet/
 build/contracts/
 contracts/
+
+devnet/

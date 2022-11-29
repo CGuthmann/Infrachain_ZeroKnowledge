@@ -1,10 +1,8 @@
 #!/bin/bash
 
-CIRCUIT_NAME="circuit_participant"
-PARTICIPANT_NAME=$1
+CIRCUIT_NAME=$1
 
-npm i
-node generateInput_$PARTICIPANT_NAME.js
+node generateInput_$CIRCUIT_NAME.js
 
 circom $CIRCUIT_NAME.circom --r1cs --wasm --sym
 
@@ -28,19 +26,16 @@ END=$(date +%s.%N)
 DIFF=$(echo "$END - $START" | bc)
 echo "Setup took $DIFF seconds"
 
-echo "Proof creation with node"
-snarkjs groth16 fullprove ./input_$PARTICIPANT_NAME.json "$CIRCUIT_NAME"_js/$CIRCUIT_NAME.wasm "$CIRCUIT_NAME"_0001.zkey proof_"$CIRCUIT_NAME"_$PARTICIPANT_NAME.json public_"$CIRCUIT_NAME"_$PARTICIPANT_NAME.json
-START=$(date +%s.%N)
+# echo "Proof creation with node"
+# snarkjs groth16 fullprove ./input_$CIRCUIT_NAME.json "$CIRCUIT_NAME"_js/$CIRCUIT_NAME.wasm "$CIRCUIT_NAME"_0001.zkey proof_"$CIRCUIT_NAME"_$CIRCUIT_NAME.json public_"$CIRCUIT_NAME"_$CIRCUIT_NAME.json
+# START=$(date +%s.%N)
 
-END=$(date +%s.%N)
-DIFF=$(echo "$END - $START" | bc)
-echo "Prove took $DIFF seconds"
+# END=$(date +%s.%N)
+# DIFF=$(echo "$END - $START" | bc)
+# echo "Prove took $DIFF seconds"
 
-
-snarkjs groth16 verify verification_key_$CIRCUIT_NAME.json public_"$CIRCUIT_NAME"_$PARTICIPANT_NAME.json proof_"$CIRCUIT_NAME"_$PARTICIPANT_NAME.json
+# snarkjs groth16 verify verification_key_$CIRCUIT_NAME.json public_"$CIRCUIT_NAME"_$CIRCUIT_NAME.json proof_"$CIRCUIT_NAME"_$CIRCUIT_NAME.json
 # rm public.json proof.json
-
-
 
 snarkjs zkey export solidityverifier "$CIRCUIT_NAME"_0001.zkey verifier_$CIRCUIT_NAME.sol
 
