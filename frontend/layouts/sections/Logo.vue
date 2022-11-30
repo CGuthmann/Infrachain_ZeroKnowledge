@@ -1,11 +1,11 @@
 <template>
   <div class="logo">
-    <NLink to="/">
+    <!-- <NLink to="/">
       <v-img max-height="80" max-width="200"
         :src="require('@/assets/images/logos/Logo_large.png')"
         alt="logo"
       />
-    </NLink>
+    </NLink> -->
   </div>
 </template>
 

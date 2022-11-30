@@ -57,6 +57,6 @@ export default {
     },
   },
   build: {
-    postcss: null,
+    // postcss: null,
   }
 };

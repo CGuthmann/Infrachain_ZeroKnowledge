@@ -31,6 +31,9 @@ docker run hello-world || echo "Please exit your shell or restart"
 echo "Starting the local Ethereum blockchain network"
 docker-compose up -d
 
+echo "Installing npm packages"
+npm i
+
 echo "Setting up truffle"
 npm i -g truffle
 truffle init

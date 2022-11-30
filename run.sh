@@ -10,11 +10,11 @@ docker-compose down
 docker-compose up -d
 cd ..
 
-sleep 20
+sleep 10
 
-# cd circuits
-# ./bootstrap.sh
-# cd ..
+cd circuits
+./bootstrap.sh
+cd ..
 
 truffle build --reset
 echo "Running some sample transactions"
@@ -23,4 +23,8 @@ node deploy.js
 
 sleep 5
 
-node prepareBetContract.js
+node prepareGame.js
+
+sleep 5
+
+node playGame.js
