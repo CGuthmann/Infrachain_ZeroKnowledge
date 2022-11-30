@@ -142,7 +142,6 @@ export default {
       this.loadingGetStarted = true
       this.showSufficientTokensAvailable = false
       this.showInsufficientTokensAvailable = false
-      // TODO: Also hide other components
       if (await this.checkSufficientTokensAvailable()) {
         this.showSufficientTokensAvailable = true
         this.$nextTick(() => {
