@@ -74,7 +74,7 @@ async function main() {
 	console.log(contractTest);
 	*/
 
-	const signer = await web3.eth.accounts.privateKeyToAccount("2b8ee2ed697e010f3ab2c1cedec3e78a067a99cc92f0d352008d3e71fd2c58da")
+	const signer = await web3.eth.accounts.privateKeyToAccount("0x22aae6e36021acbf8d4a05a169d77919929d390dab212c609c319ea99c4dd298");
 	console.log(signer);
 	console.log(account);
 	web3.eth.accounts.wallet.add(signer);
@@ -120,7 +120,9 @@ async function main() {
 		console.log(err);
 	})
 
-	// console.log(response);
+	console.log(response.transactionHash);
+
+	process.exit();
 	
 }
 

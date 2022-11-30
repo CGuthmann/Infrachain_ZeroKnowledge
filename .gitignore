@@ -21,3 +21,4 @@ build/contracts/
 contracts/verifier*.sol
 
 
+devnet/

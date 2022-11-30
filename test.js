@@ -88,11 +88,11 @@ async function main() {
 		gas: 3500000
 	})
 
-	console.log(contractParticipantVerifierInstance._address);
+	console.log("Participant verifier contract address: " + contractParticipantVerifierInstance._address);
 
 
 
-	await new Promise(r => setTimeout(r, 15000));
+	// await new Promise(r => setTimeout(r, 15000));
 
 	let contractTotalVerifierRawdata = fs.readFileSync('build/contracts/Verifier_circuit_total.json');
 	let contractTotalVerifierMetadata = JSON.parse(contractTotalVerifierRawdata);
@@ -111,11 +111,11 @@ async function main() {
 		gas: 4000005
 	})
 
-	console.log(contractTotalVerifierInstance._address);
+	console.log("Total verifier contract address: " + contractTotalVerifierInstance._address);
 
 	
 
-	await new Promise(r => setTimeout(r, 15000));
+	// await new Promise(r => setTimeout(r, 15000));
 
 	
 
@@ -136,9 +136,9 @@ async function main() {
 		gas: 4000005
 	})
 
-	console.log(contractClaimVerifierInstance._address);
+	console.log("Claim verifier contract address: " + contractClaimVerifierInstance._address);
 
-	await new Promise(r => setTimeout(r, 15000));
+	// await new Promise(r => setTimeout(r, 15000));
 
 
 	//let calldata = await snarkjs.groth16.exportSolidityCallData(proof, publicSignals);
@@ -164,8 +164,8 @@ async function main() {
 
 		const { proof, publicSignals } = await snarkjs.groth16.fullProve(inputs, "circuits/circuit_participant_js/circuit_participant.wasm", "circuits/circuit_participant_0001.zkey");
 
-		console.log("Proof: ");
-		console.log(JSON.stringify(proof, null, 1));
+		//console.log("Proof: ");
+		//console.log(JSON.stringify(proof, null, 1));
 
 		console.log("Public: ");
 		console.log(JSON.stringify(publicSignals, null, 1));
@@ -180,12 +180,12 @@ async function main() {
 
 	
 
-		console.log(contractTestingInstance._address);
+		console.log("Testing contract address: " + contractTestingInstance._address);
 
 		fs.writeFileSync("./testContractAddress", contractTestingInstance._address);
 		
 		let calldata = await groth16ExportSolidityCallData(proof, publicSignals);
-		console.log(calldata);
+		// console.log(calldata);
 
 
 		let response = await contractTestingInstance.methods.tst(calldata[0], calldata[1], calldata[2],
@@ -196,7 +196,7 @@ async function main() {
 			console.log(err);
 		})
 
-		console.log(response);
+		// console.log(response);
 
 		if (res === true) {
 			console.log("Verification OK");
@@ -225,7 +225,7 @@ async function main() {
 	}
 	
 	let calldata = await groth16ExportSolidityCallData(proof, publicSignals);
-	console.log(calldata);
+	// console.log(calldata);
 
 	
 	let response = await contractTestingInstance.methods.tst_total(calldata[0], calldata[1], calldata[2],
@@ -237,6 +237,8 @@ async function main() {
 	})
 
 	console.log(response);
+
+	process.exit(0);
 	
 }
 

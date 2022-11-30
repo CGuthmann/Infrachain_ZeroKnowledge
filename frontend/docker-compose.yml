@@ -1,0 +1,10 @@
+version: '3.7'
+services:
+  node1:
+    image: node:14.16.1
+    working_dir: /app
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/app
+    command: bash -c "npm i && npm run dev"

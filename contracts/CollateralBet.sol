@@ -56,15 +56,18 @@ contract CollateralBet is Ownable {
         address bAddress;
         address cAddress;
         Stage stage;
-        uint256[3] aInput;
-        uint256[3] bInput;
-        uint256[3] cInput;
+        uint256 comA;
+        uint256 comB; 
+        uint256 comC;
+        uint256 comRA;
+        uint256 comRAB;
+        uint256 comRABC;
         uint256 total;
     }
 
     Container[] state;
 
-    mapping(address => uint256) public hashMap;
+    mapping(address => uint256) public addressToState;
 
     Verifier_circuit_participants public VerifierCircuitParticipantsInterface;
     Verifier_circuit_total public VerifierCircuitTotalInterface;
@@ -91,7 +94,7 @@ contract CollateralBet is Ownable {
         address verifierCircuitClaimContract
     ) {
         tokenAddress = _tokenAddress; //TODO: better have additional checks
-        ERC20BurnableInterface = ERC20Burnable(tokenAddress);
+        ERC20BurnableInterface = CollateralToken(tokenAddress);
         updateEpochTimestamp();
 
         VerifierCircuitParticipantsInterface = Verifier_circuit_participants(
@@ -196,13 +199,26 @@ contract CollateralBet is Ownable {
 
         state.push(container);
         uint256 index = state.length - 1;
-        hashMap[aAddress] = index;
-        hashMap[bAddress] = index;
-        hashMap[cAddress] = index;
+        addressToState[aAddress] = index;
+        addressToState[bAddress] = index;
+        addressToState[cAddress] = index;
     }
 
-    function one() external {
-        address _aAddress = msg.sender;
+    function one(
+        // encrypted value
+        uint256[2] memory a,
+        uint256[2][2] memory b,
+        uint256[2] memory c,
+        uint256[3] memory input) external() {
+            require(state[index].stage == Stage.Zero, "Game is not in stage 0 (it is not A's turn)");
+            uint index = addressToState[msg.sender];
+            require(state[index].aAddress == msg.sender, "Sender is not role A");
+            require(Verifier_circuit_participants.verifyProof(a, b, c, inputs), "Proof invalid");
+            state[index].comA = input[0];
+            state[index].comR = input[1];
+            state[index].comRA = input[2];
+            // set encrypted value
+        }
     }
 
     function two() external {
