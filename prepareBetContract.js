@@ -30,62 +30,118 @@ const contractAddresses = require("./contractAddresses.json");
 const account = config.account
 
 const accounts = require("./mock_addresses.json");
-for (acc of accounts) {
-	console.log(acc.address);
-}
 
 async function main() {
 
 	console.log(config.account);
 
-	const signer = await web3.eth.accounts.privateKeyToAccount("22aae6e36021acbf8d4a05a169d77919929d390dab212c609c319ea99c4dd298")
-	console.log(account);
-	web3.eth.accounts.wallet.add(signer);
+	for (let acc of accounts) {
 
-	const balance = await web3.eth.getBalance(config.account);
-	console.log("balance", web3.utils.fromWei(balance, "ether"));
+		let signer = await web3.eth.accounts.privateKeyToAccount(acc.privateKey)
+		console.log(acc);
+		web3.eth.accounts.wallet.add(signer);
 
-	let contractCollateralTokenRawData = fs.readFileSync('build/contracts/CollateralToken.json');
-	let contractCollateralTokenMetaData = JSON.parse(contractCollateralTokenRawData);
-	// console.log(metadata);
+		let balance = await web3.eth.getBalance(acc.address);
+		console.log("balance", web3.utils.fromWei(balance, "ether"));
+	}
 
-	const artifact = require("./build/contracts/collateralToken.json");
+	const artifactCollateralToken = require("./build/contracts/CollateralToken.json");
+
+	// console.log(artifact.abi);
+	// console.log(addressContract);
+
+	const instanceCollateralToken = new web3.eth.Contract(
+		artifactCollateralToken.abi,
+		contractAddresses.collateralToken
+	)
+
+	/*
+	console.log("Setting the minter");
+	let response = await instanceCollateralToken.methods.addMinter(contractAddresses.collateralBet).send({
+			from: config.account,
+			gas: 4000000
+		}).catch(err => {
+			console.log(err);
+		})
+	
+	console.log(response);
+	
+	console.log("Setting the burner");
+	response = await instanceCollateralToken.methods.addBurner(contractAddresses.collateralBet).send({
+		from: config.account,
+		gas: 4000000
+	}).catch(err => {
+		console.log(err);
+	})
+	
+	console.log(response);
+	*/
+
+	const artifactCollateralBet = require("./build/contracts/CollateralBet.json");
 
 	// console.log(artifact.abi);
 	// console.log(addressContract);
 
 	const instanceCollateralBet = new web3.eth.Contract(
-		artifact.abi,
-		contractAddresses.collateralToken
+		artifactCollateralBet.abi,
+		contractAddresses.collateralBet
 	)
 
-	console.log("Setting the minter");
-	let response = await instanceCollateralBet.methods.addMinter(contractAddresses.collateralBet).send({
+
+
+	console.log("Mint for addresses");
+
+	for (let acc of accounts) {
+		console.log(acc.address);
+		let response = await instanceCollateralToken.methods.mint(acc.address, 1).send({
 			from: config.account,
 			gas: 4000000
 		}).catch(err => {
 			console.log(err);
 		})
 
-	console.log(response);
+		//console.log(response)
+		console.log(response.events.Transfer.returnValues);
 
-	console.log("Setting the burner");
-	response = await instanceCollateralBet.methods.addBurner(contractAddresses.collateralBet).send({
-		from: config.account,
-		gas: 4000000
-	}).catch(err => {
+		console.log("Approvals");
+		response = await instanceCollateralToken.methods.approve(contractAddresses.collateralBet, 1).send({
+			from: acc.address,
+			gas: 4000000
+		}).catch(err => {
+			console.log(err);
+		})
+
+		console.log(response);
+		console.log(response.events.Approval.returnValues);
+
+
+		console.log("Registration");
+		response = await instanceCollateralBet.methods.deposit(1).send({
+			from: acc.address,
+			gas: 4000000
+		}).catch(err => {
+			console.log(err);
+		})
+
+		console.log(response);
+		console.log(response.event.Transfer.returnValues);
+
+	}
+
+	/*
+	console.log("New balance");
+	response = await instanceCollateralToken.methods.balanceOf(config.account).call().catch(err => {
 		console.log(err);
 	})
+	
+	console.log(response)
+	*/
 
 	console.log(response);
 
-	console.log("Mint for addresses");
-	response = await instanceCollateralBet.methods.mint(config.account, 1).send({
-		from: config.account,
-		gas: 4000000
-	}).catch(err => {
-		console.log(err);
-	})
+
+
+
 
 
 	process.exit(0);

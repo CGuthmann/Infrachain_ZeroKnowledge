@@ -27,13 +27,13 @@ const provider = new Web3.providers.HttpProvider(config.node);
 const web3 = new Web3(provider);
 
 
-const account = config.account
-const delay = 15
+const account = config.account;
+const delay = 1;
 
-const ParticipantAddress = '0x755284B1aB5Ce65E1b71F019eeF74B68CDeebf4f';
-const TotalVerifierAddress = '0x1376AC2b971964dBB14fEE84b4B340F6E00fA901';
-const ClaimVerifierAddress = '0x92cfD520Fef2C95E22CC702e700f50f4Bb8747DB';
-const CollateralTokenAddress = '0xD553b1500237d659C3aCaa2a72B039ecaf335C40';
+const ParticipantAddress = '';
+const TotalVerifierAddress = '';
+const ClaimVerifierAddress = '';
+const CollateralTokenAddress = '';
 
 
 async function main() {
@@ -217,7 +217,7 @@ async function main() {
 
     contractAddresses.collateralBet = contractCollateralBetInstance._address;
 
-    fs.writeFileSync("./contractAddress",JSON.stringify(contractAddresses));
+    fs.writeFileSync("./contractAddresses.json",JSON.stringify(contractAddresses));
 	
 }
 
