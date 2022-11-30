@@ -40,7 +40,6 @@ interface Verifier_circuit_claim {
 contract CollateralBet is Ownable {
     CollateralToken private ERC20BurnableInterface;
     address public tokenAddress;
-    address[] public registeredParticipants;
 
     enum Stage {
         Zero,
@@ -124,9 +123,23 @@ contract CollateralBet is Ownable {
         _start();
     }
 
+    address[] public registeredParticipants;
+    mapping(address => bool) isRegistered;
+
     function register(address _participantAddress) internal {
-        registeredParticipants.push(_participantAddress);
+        if (isRegistered[_participantAddress] == false) {
+            registeredParticipants.push(_participantAddress);
+            isRegistered[_participantAddress] = true;
+        }
     }
+
+    function clearRegistration() internal {
+        for (uint256 i = 0; i < registeredParticipants.length; i++) {
+            isRegistered[registeredParticipants[i]] = false;
+        }
+        delete registeredParticipants;
+    }
+
 
     function startByOwner() public onlyOwner {
         _start();
@@ -139,7 +152,7 @@ contract CollateralBet is Ownable {
         );
         burnTokens();
         address[] memory shuffeledArray = shuffleArray(registeredParticipants);
-        delete registeredParticipants;
+        clearRegistration();
         address[] memory processedArray = processArray(shuffeledArray);
 
         performMPCs(processedArray);
