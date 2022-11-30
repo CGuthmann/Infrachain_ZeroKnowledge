@@ -11,11 +11,14 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@walletconnect/web3-provider": "^1.8.0",
     "chart.js": "^3.9.1",
     "core-js": "^3.15.1",
     "nuxt": "^2.15.7",
     "vue-chartjs": "^4.1.2",
-    "vuetify": "^2.5.5"
+    "vuetify": "^2.5.5",
+    "web3": "^1.8.1",
+    "web3modal-vue": "^1.0.5"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.12.1"
