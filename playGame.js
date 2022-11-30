@@ -65,6 +65,12 @@ async function groth16ExportSolidityCallData(proof, pub) {
 	return P;
 }
 
+function printState(state){
+    let keys = Object.keys(state);
+    for(let i = keys.length / 2; i < keys.length; i++){
+        console.log(keys[i] + ": " + state[keys[i]])
+    }
+}
 
 async function main() {
 
@@ -113,7 +119,7 @@ async function main() {
 	response = await instanceCollateralBet.methods.state(0).call().catch(err => {
 		console.log(err);
 	})
-	console.log(response);
+	printState(response);
 
 	let a_address = response.aAddress;
 	let b_address = response.bAddress;
@@ -170,7 +176,7 @@ async function main() {
 	response = await instanceCollateralBet.methods.state(0).call().catch(err => {
 		console.log(err);
 	})
-	console.log(response);
+	printState(response);
 
 
 	await new Promise(r => setTimeout(r, 10000));
@@ -213,7 +219,7 @@ async function main() {
 		response = await instanceCollateralBet.methods.state(0).call().catch(err => {
 			console.log(err);
 		})
-		console.log(response);
+		printState(response);
 	}
 
 	await new Promise(r => setTimeout(r, 5000));
@@ -255,7 +261,7 @@ async function main() {
 		response = await instanceCollateralBet.methods.state(0).call().catch(err => {
 			console.log(err);
 		})
-		console.log(response);
+		printState(response);
 	}
 
 	await new Promise(r => setTimeout(r, 3000));
@@ -297,7 +303,7 @@ async function main() {
 		response = await instanceCollateralBet.methods.state(0).call().catch(err => {
 			console.log(err);
 		})
-		console.log(response);
+		printState(response);
 	}
 	
 	{
@@ -338,7 +344,7 @@ async function main() {
 		response = await instanceCollateralBet.methods.state(0).call().catch(err => {
 			console.log(err);
 		})
-		console.log(response);
+		printState(response);
 
 
 		response = await instanceCollateralToken.methods.balanceOf(a_address).call().catch(err => {
