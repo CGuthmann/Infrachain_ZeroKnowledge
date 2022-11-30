@@ -30,16 +30,18 @@ const web3 = new Web3(provider);
 const account = config.account
 const delay = 15
 
-const ParticipantAddress = '';
-const TotalVerifierAddress = '';
-const ClaimVerifierAddress = '';
-const CollateralTokenAddress = '';
-const CollateralBetAddress = '';
+const ParticipantAddress = '0x755284B1aB5Ce65E1b71F019eeF74B68CDeebf4f';
+const TotalVerifierAddress = '0x1376AC2b971964dBB14fEE84b4B340F6E00fA901';
+const ClaimVerifierAddress = '0x92cfD520Fef2C95E22CC702e700f50f4Bb8747DB';
+const CollateralTokenAddress = '0xD553b1500237d659C3aCaa2a72B039ecaf335C40';
 
 
 async function main() {
 
 	console.log(config.account);
+
+    const contractAddresses = {};
+
 
 	const signer = await web3.eth.accounts.privateKeyToAccount("22aae6e36021acbf8d4a05a169d77919929d390dab212c609c319ea99c4dd298")
 	web3.eth.accounts.wallet.add(signer);
@@ -47,8 +49,8 @@ async function main() {
 	const balance = await web3.eth.getBalance(config.account);
 	console.log("balance", web3.utils.fromWei(balance, "ether"));
 
-
-    
+    let contractParticipantVerifierInstance;
+    if(ParticipantAddress == ''){
 	let contractParticipantVerifierRawdata = fs.readFileSync('build/contracts/Verifier_circuit_participant.json');
 	let contractParticipantVerifierMetadata = JSON.parse(contractParticipantVerifierRawdata);
 	// console.log(metadata);
@@ -61,99 +63,135 @@ async function main() {
 		arguments: []
 	})
 
-	const contractParticipantVerifierInstance = await contractParticipantVerifierSend.send({
+	contractParticipantVerifierInstance = await contractParticipantVerifierSend.send({
 		from: config.account,
 		gas: 3500000
 	})
 
+	await new Promise(r => setTimeout(r, delay));
+    }else {
+        const artifact = require("./build/contracts/Verifier_circuit_participant.json");
+
+        contractParticipantVerifierInstance = await new web3.eth.Contract(
+            artifact.abi,
+            ParticipantAddress
+        )
+    }
+
 	console.log("ParticipantVerifier deployed at: ",contractParticipantVerifierInstance._address);
 
-	await new Promise(r => setTimeout(r, delay));
 
 
 
 
+    let contractTotalVerifierInstance;
+    if(TotalVerifierAddress == ''){
+        let contractTotalVerifierRawdata = fs.readFileSync('build/contracts/Verifier_circuit_total.json');
+        let contractTotalVerifierMetadata = JSON.parse(contractTotalVerifierRawdata);
+        // console.log(metadata);
 
+        const contractTotalVerifier = new web3.eth.Contract(contractTotalVerifierMetadata.abi);
+        // console.log(contract);
 
+        const contractTotalVerifierSend = contractTotalVerifier.deploy({
+            data: contractTotalVerifierMetadata.bytecode,
+            arguments: []
+        })
 
-	let contractTotalVerifierRawdata = fs.readFileSync('build/contracts/Verifier_circuit_total.json');
-	let contractTotalVerifierMetadata = JSON.parse(contractTotalVerifierRawdata);
-	// console.log(metadata);
+        contractTotalVerifierInstance = await contractTotalVerifierSend.send({
+            from: config.account,
+            gas: 4000005
+        })
 
-	const contractTotalVerifier = new web3.eth.Contract(contractTotalVerifierMetadata.abi);
-	// console.log(contract);
+        
 
-	const contractTotalVerifierSend = contractTotalVerifier.deploy({
-		data: contractTotalVerifierMetadata.bytecode,
-		arguments: []
-	})
+        await new Promise(r => setTimeout(r, delay));
+    }else {
+        const artifact = require("./build/contracts/Verifier_circuit_total.json");
 
-	const contractTotalVerifierInstance = await contractTotalVerifierSend.send({
-		from: config.account,
-		gas: 4000005
-	})
+        contractTotalVerifierInstance = new web3.eth.Contract(
+            artifact.abi,
+            ParticipantAddress
+        )
+    }
 
-	console.log("TotalVerifier deployed at: ",contractTotalVerifierInstance._address);
-	
+    console.log("TotalVerifier deployed at: ",contractTotalVerifierInstance._address);
 
-	await new Promise(r => setTimeout(r, delay));
-
-
-
-
-
-
-	
-
-	let contractClaimVerifierRawdata = fs.readFileSync('build/contracts/Verifier_circuit_claim.json');
-	let contractClaimVerifierMetadata = JSON.parse(contractClaimVerifierRawdata);
-	// console.log(metadata);
-
-	const contractClaimVerifier = new web3.eth.Contract(contractClaimVerifierMetadata.abi);
-	// console.log(contract);
-
-	const contractClaimVerifierSend = contractClaimVerifier.deploy({
-		data: contractClaimVerifierMetadata.bytecode,
-		arguments: []
-	})
-
-	const contractClaimVerifierInstance = await contractClaimVerifierSend.send({
-		from: config.account,
-		gas: 4000005
-	})
-
-	console.log("ClaimVerifier deployed at: ",contractTotalVerifierInstance._address);
-
-
-	await new Promise(r => setTimeout(r, delay));
 
 
 
 
 	
+    let contractClaimVerifierInstance;
+    if(ClaimVerifierAddress == '')
+    {
+        let contractClaimVerifierRawdata = fs.readFileSync('build/contracts/Verifier_circuit_claim.json');
+        let contractClaimVerifierMetadata = JSON.parse(contractClaimVerifierRawdata);
+        // console.log(metadata);
 
-	let contractCollateralTokenRawdata = fs.readFileSync('build/contracts/CollateralToken.json');
-	let contractCollateralTokenMetadata = JSON.parse(contractCollateralTokenRawdata);
-	// console.log(metadata);
+        const contractClaimVerifier = new web3.eth.Contract(contractClaimVerifierMetadata.abi);
+        // console.log(contract);
 
-	const contractCollateralToken = new web3.eth.Contract(contractCollateralTokenMetadata.abi);
-	// console.log(contract);
+        const contractClaimVerifierSend = contractClaimVerifier.deploy({
+            data: contractClaimVerifierMetadata.bytecode,
+            arguments: []
+        })
 
-	const contractCollateralTokenSend = contractCollateralToken.deploy({
-		data: contractCollateralTokenMetadata.bytecode,
-		arguments: []
-	})
-
-	const contractCollateralTokenInstance = await contractCollateralTokenSend.send({
-		from: config.account,
-		gas: 4000005
-	})
-
-	console.log("CollateralToken deployed at: ",contractTotalVerifierInstance._address);
+        contractClaimVerifierInstance = await contractClaimVerifierSend.send({
+            from: config.account,
+            gas: 4000005
+        })
 
 
-	await new Promise(r => setTimeout(r, delay));
 
+        await new Promise(r => setTimeout(r, delay));
+    }else {
+        const artifact = require("./build/contracts/Verifier_circuit_claim.json");
+
+        contractClaimVerifierInstance = new web3.eth.Contract(
+            artifact.abi,
+            ParticipantAddress
+        )
+    }
+
+    console.log("ClaimVerifier deployed at: ",contractClaimVerifierInstance._address);
+
+
+
+	
+    let contractCollateralTokenInstance;
+    if(CollateralTokenAddress == '')
+    {    
+        let contractCollateralTokenRawdata = fs.readFileSync('build/contracts/CollateralToken.json');
+        let contractCollateralTokenMetadata = JSON.parse(contractCollateralTokenRawdata);
+        // console.log(metadata);
+
+        const contractCollateralToken = new web3.eth.Contract(contractCollateralTokenMetadata.abi);
+        // console.log(contract);
+
+        const contractCollateralTokenSend = contractCollateralToken.deploy({
+            data: contractCollateralTokenMetadata.bytecode,
+            arguments: []
+        })
+
+        contractCollateralTokenInstance = await contractCollateralTokenSend.send({
+            from: config.account,
+            gas: 4000005
+        })
+
+
+
+        await new Promise(r => setTimeout(r, delay));
+    }else {
+        const artifact = require("./build/contracts/CollateralToken.json");
+
+        contractParticipantVerifierInstance = new web3.eth.Contract(
+            artifact.abi,
+            ParticipantAddress
+        )
+    }
+    console.log("CollateralToken deployed at: ",contractCollateralTokenInstance._address);
+    contractAddresses.collateralToken = contractCollateralTokenInstance._address;
 
 
 
@@ -176,6 +214,10 @@ async function main() {
 		gas: 3500000
 	})
     console.log("MainVerifier deployed at: ",contractCollateralBetInstance._address);
+
+    contractAddresses.collateralBet = contractCollateralBetInstance._address;
+
+    fs.writeFileSync("./contractAddress",JSON.stringify(contractAddresses));
 	
 }
 

@@ -57,6 +57,7 @@ contract CollateralBet is Ownable {
         address cAddress;
         Stage stage;
         uint256 comA;
+        uint256 comR;
         uint256 comB; 
         uint256 comC;
         uint256 comRA;
@@ -69,9 +70,9 @@ contract CollateralBet is Ownable {
 
     mapping(address => uint256) public addressToState;
 
-    Verifier_circuit_participants public VerifierCircuitParticipantsInterface;
-    Verifier_circuit_total public VerifierCircuitTotalInterface;
-    Verifier_circuit_claim public VerifierCircuitClaimInterface;
+    Verifier_circuit_participants verifierCircuitParticipantsInterface;
+    Verifier_circuit_total verifierCircuitTotalInterface;
+    Verifier_circuit_claim verifierCircuitClaimInterface;
 
     //EPOCH HANDLING
     uint256 public epochTimestamp;
@@ -97,13 +98,13 @@ contract CollateralBet is Ownable {
         ERC20BurnableInterface = CollateralToken(tokenAddress);
         updateEpochTimestamp();
 
-        VerifierCircuitParticipantsInterface = Verifier_circuit_participants(
+        verifierCircuitParticipantsInterface = Verifier_circuit_participants(
             verifierCircuitParticipantsContract
         );
-        VerifierCircuitTotalInterface = Verifier_circuit_total(
+        verifierCircuitTotalInterface = Verifier_circuit_total(
             verifierCircuitTotalContract
         );
-        VerifierCircuitClaimInterface = Verifier_circuit_claim(
+        verifierCircuitClaimInterface = Verifier_circuit_claim(
             verifierCircuitClaimContract
         );
     }
@@ -185,15 +186,18 @@ contract CollateralBet is Ownable {
         // uint balance[3] = [1, 2, 3];
         //   uint[3] memory c = [uint(1) , 2, 3];
 
-        uint256[3] memory mock = [uint256(0), uint256(0), uint256(0)];
         Container memory container = Container(
             aAddress,
             bAddress,
             cAddress,
             Stage.Zero,
-            mock,
-            mock,
-            mock,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
             0
         );
 
@@ -206,20 +210,22 @@ contract CollateralBet is Ownable {
 
     function one(
         // encrypted value
-        uint256[2] memory a,
+        uint256[2] memory a, 
         uint256[2][2] memory b,
         uint256[2] memory c,
-        uint256[3] memory input) external() {
-            require(state[index].stage == Stage.Zero, "Game is not in stage 0 (it is not A's turn)");
+        uint256[3] memory input) external{
             uint index = addressToState[msg.sender];
+
+            require(state[index].stage == Stage.Zero, "Game is not in stage 0 (it is not A's turn)");
             require(state[index].aAddress == msg.sender, "Sender is not role A");
-            require(Verifier_circuit_participants.verifyProof(a, b, c, inputs), "Proof invalid");
+            require(verifierCircuitParticipantsInterface.verifyProof(a, b, c, input), "Proof invalid");
+
             state[index].comA = input[0];
             state[index].comR = input[1];
             state[index].comRA = input[2];
             // set encrypted value
         }
-    }
+
 
     function two() external {
         address _bAddress = msg.sender;
