@@ -705,13 +705,25 @@ export async function initWeb3() {
 
     console.debug("initWeb3() instanceCollateralToken >> ", instanceCollateralToken)
 
-    const metamaskLoggedInGuy = "0xd2f82E45C337Ea7Af8F9f59F185fAc420DcdD459"
 
     const guy = "0x7e026f90A727259a1dB94cC9453410Bd6d128022"
-    const response = await instanceCollateralToken.methods.balanceOf(guy).call().catch(err => {
+    const response = await instanceCollateralToken.methods.balanceOf(guy).call()
+      .catch(err => {
       console.error(err);
     })
-
     console.debug("initWeb3() response >> ", response)
+
+
+    const owner = "0xd2f82E45C337Ea7Af8F9f59F185fAc420DcdD459"
+    const guyToBeMinted = "0x2e541E159f023c189C4c8B6402F40f274Ceb8464"
+    let mintResponse = await instanceCollateralToken.methods.mint(guyToBeMinted, 1).send({
+      from: owner,
+      gas: 4000000
+    }).catch(err => {
+      console.log(err);
+    })
+
+    console.debug("initWeb3() mintResponse >> ", mintResponse)
+    console.debug("initWeb3() mintResponse.events.Transfer.returnValues >> ", mintResponse.events.Transfer.returnValues)
   }
 }

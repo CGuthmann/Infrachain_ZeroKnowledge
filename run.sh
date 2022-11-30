@@ -1,10 +1,16 @@
 #!/bin/bash
 
-docker-compose down
-git checkout devnet
-docker-compose up -d
+# docker-compose down
+# rm -rf devnet/
+# git checkout devnet
+# docker-compose up -d
 
-sleep 5
+cd quorum
+docker-compose down
+docker-compose up -d
+cd ..
+
+sleep 10
 
 # cd circuits
 # ./bootstrap.sh
