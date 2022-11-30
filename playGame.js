@@ -132,7 +132,9 @@ async function main() {
 		console.log(err);
 	})
 
-	console.log("Old balance for A: " + response);
+	console.log("\nOld balance for A: " + response);
+
+	await new Promise(r => setTimeout(r, 8000));
 	
 	// console.log(a_address);
 	console.log("");
@@ -153,11 +155,13 @@ async function main() {
 
 	let res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
 
+	
 	if (res === true) {
 		console.log("Verification OK");
 	} else {
 		console.log("Invalid proof");
 	}
+	
 
 	let calldata = await groth16ExportSolidityCallData(proof, publicSignals);
 	// console.log(calldata);
@@ -171,8 +175,9 @@ async function main() {
 			console.log(err);
 		})
 
-	try { console.log(response.transactionHash) } catch (err) { }
+	// try { console.log(response.transactionHash) } catch (err) { }
 
+	console.log("\n")
 
 	console.log("Get state for game after stage one");
 	response = await instanceCollateralBet.methods.state(0).call().catch(err => {
@@ -196,11 +201,13 @@ async function main() {
 
 		let res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
 
+		/*
 		if (res === true) {
 			console.log("Verification OK");
 		} else {
 			console.log("Invalid proof");
 		}
+		*/
 
 		let calldata = await groth16ExportSolidityCallData(proof, publicSignals);
 		// console.log(calldata);
@@ -214,8 +221,9 @@ async function main() {
 				console.log(err);
 			})
 
-		try { console.log(response.transactionHash) } catch (err) { }
+		//try { console.log(response.transactionHash) } catch (err) { }
 
+		console.log("\n");
 
 		console.log("Get state for game after stage two");
 		response = await instanceCollateralBet.methods.state(0).call().catch(err => {
@@ -238,11 +246,13 @@ async function main() {
 
 		let res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
 
+		/*
 		if (res === true) {
 			console.log("Verification OK");
 		} else {
 			console.log("Invalid proof");
 		}
+		*/
 
 		let calldata = await groth16ExportSolidityCallData(proof, publicSignals);
 		// console.log(calldata);
@@ -256,7 +266,9 @@ async function main() {
 				console.log(err);
 			})
 
-		try { console.log(response.transactionHash) } catch (err) { }
+		// try { console.log(response.transactionHash) } catch (err) { }
+
+		console.log("\n");
 
 
 		console.log("Get state for game after stage three");
@@ -280,11 +292,13 @@ async function main() {
 
 		let res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
 
+		/*
 		if (res === true) {
 			console.log("Verification OK");
 		} else {
 			console.log("Invalid proof");
 		}
+		*/
 
 		let calldata = await groth16ExportSolidityCallData(proof, publicSignals);
 		// console.log(calldata);
@@ -298,8 +312,9 @@ async function main() {
 				console.log(err);
 			})
 
-		try { console.log(response.transactionHash) } catch (err) { }
+		// try { console.log(response.transactionHash) } catch (err) { }
 
+		console.log("\n");
 
 		console.log("Get state for game after stage four");
 		response = await instanceCollateralBet.methods.state(0).call().catch(err => {
@@ -320,11 +335,13 @@ async function main() {
 
 		let res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
 
+		/*
 		if (res === true) {
 			console.log("Verification OK");
 		} else {
 			console.log("Invalid proof");
 		}
+		*/
 
 		let calldata = await groth16ExportSolidityCallData(proof, publicSignals);
 		// console.log(calldata);
@@ -353,7 +370,7 @@ async function main() {
 			console.log(err);
 		})
 
-		console.log("New balance for A: " + response);
+		console.log("\nNew balance for A: " + response);
 
 
 		process.exit();
