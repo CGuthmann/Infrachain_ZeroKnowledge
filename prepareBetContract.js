@@ -56,7 +56,6 @@ async function main() {
 	let resp;
 	let response;
 
-	/*
 
 	resp = await web3.eth.sendTransaction({ "from": accounts[2].address, "to": accounts[0].address, "value": 100000000000000000000, "gas": 4000000 })
 	// console.log(resp);
@@ -76,16 +75,16 @@ async function main() {
 	}
 
 	console.log("Setting the minter");
-	let response = await instanceCollateralToken.methods.addMinter(contractAddresses.collateralBet).send({
-			from: config.account,
-			gas: 4000000
-		}).catch(err => {
-			console.log(err);
-		})
-	
-	// console.log(response);
-	console.log(response.events.RoleGrantedreturnValues);
-	
+	response = await instanceCollateralToken.methods.addMinter(contractAddresses.collateralBet).send({
+		from: config.account,
+		gas: 4000000
+	}).catch(err => {
+		console.log(err);
+	})
+
+	console.log(response);
+	console.log(response.events.RoleGranted.returnValues);
+
 	console.log("Setting the burner");
 	response = await instanceCollateralToken.methods.addBurner(contractAddresses.collateralBet).send({
 		from: config.account,
@@ -93,11 +92,10 @@ async function main() {
 	}).catch(err => {
 		console.log(err);
 	})
-	
-	// console.log(response);
-	console.log(response.events.RoleGrantedreturnValues);
 
-	*/
+	console.log(response);
+	console.log(response.events.RoleGranted.returnValues);
+
 
 	const artifactCollateralBet = require("./build/contracts/CollateralBet.json");
 
@@ -109,8 +107,7 @@ async function main() {
 		contractAddresses.collateralBet
 	)
 
-	
-	/*
+
 
 	console.log("Mint for addresses");
 
@@ -124,7 +121,17 @@ async function main() {
 		})
 
 		console.log(response)
-		// console.log(response.events.Transfer.returnValues);
+		console.log(response.events.Transfer.returnValues);
+
+
+		console.log("New balance");
+		response = await instanceCollateralToken.methods.balanceOf(acc.address).call().catch(err => {
+			console.log(err);
+		})
+
+		console.log("");
+		console.log(response);
+		console.log("");
 
 		console.log("Approvals");
 		response = await instanceCollateralToken.methods.approve(contractAddresses.collateralBet, 1).send({
@@ -135,7 +142,7 @@ async function main() {
 		})
 
 		console.log(response);
-		// console.log(response.events.Approval.returnValues);
+		console.log(response.events.Approval.returnValues);
 
 
 		console.log("Registration");
@@ -147,11 +154,11 @@ async function main() {
 		})
 
 		console.log(response);
-		//console.log(response.event.Transfer.returnValues);
+		console.log(response.event.Transfer.returnValues);
 
 	}
 
-	*/
+
 
 	console.log("Get registered participants");
 	response = await instanceCollateralBet.methods.registeredParticipants(5).call().catch(err => {
@@ -173,7 +180,15 @@ async function main() {
 	// console.log(response);
 
 
+	console.log("Starting the game");
+	response = await instanceCollateralBet.methods.startByOwner().send({
+		from: config.account,
+		gas: 4000000
+	}).catch(err => {
+		console.log(err);
+	})
 
+	console.log(response);
 
 
 
