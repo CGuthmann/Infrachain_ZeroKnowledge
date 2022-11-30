@@ -149,7 +149,7 @@ contract CollateralBet is Ownable {
             registeredParticipants.length > 0,
             "Number of participants is 0"
         );
-        //resetState();
+        resetState();
         burnTokens();
         address[] memory shuffeledArray = shuffleArray(registeredParticipants);
         clearRegistration();
@@ -310,10 +310,11 @@ contract CollateralBet is Ownable {
         uint256[2] memory c,
         uint256[2] memory input
     ) external {
-        //require(msg.sender != address(0), "Transition fro 0 not allowed");
+        require(msg.sender != address(0), "Transition fro 0 not allowed");
         uint index = addressToState[msg.sender];
         /*require(state[index].stage == Stage.Four, "Game is not in stage 4 (the mpc is not completed)");
-        require(state[index].total == input[1]);
+        require(state[index].total == input[1]);*/
+        
         if(msg.sender == state[index].aAddress){
             require(state[index].comA == input[0]);
             addressToState[state[index].aAddress] = 0;
@@ -330,7 +331,7 @@ contract CollateralBet is Ownable {
             state[index].cAddress = address(0);
         }else{
             revert();
-        }*/
+        }
 
         require(verifierCircuitClaimInterface.verifyProof(a, b, c, input),"Proof invalid");
 
@@ -338,12 +339,12 @@ contract CollateralBet is Ownable {
     }
 
     function resetState() internal {
-        for(uint256 i = state.length -1; i >= 0; i--){
-            addressToState[state[i].aAddress] = 0;
-            addressToState[state[i].bAddress] = 0;
-            addressToState[state[i].cAddress] = 0;
-            delete state[i];
+        for(uint256 i = 0; i < state.length; i++){
+            delete addressToState[state[i].aAddress];
+            delete addressToState[state[i].bAddress];
+            delete addressToState[state[i].cAddress];
         }
+        delete state;
     }
 
     function burnTokens() internal {
