@@ -32,6 +32,7 @@ const input_A = require("./circuits/input_A.json");
 const input_B = require("./circuits/input_B.json");
 const input_C = require("./circuits/input_C.json");
 const input_total = require("./circuits/input_total.json")
+const input_claimA = require("./circuits/input_A_claim.json")
 const input_claimC = require("./circuits/input_claimC.json")
 
 
@@ -118,8 +119,8 @@ async function main() {
 	let b_address = response.bAddress;
 	let c_address = response.cAddress;
 
-	/*
 
+	
 	console.log(a_address);
 
 	let { proof, publicSignals } = await snarkjs.groth16.fullProve(input_A, "circuits/circuit_participant_js/circuit_participant.wasm", "circuits/circuit_participant_0001.zkey");
@@ -280,9 +281,9 @@ async function main() {
 		})
 		console.log(response);
 	}
-
+	
 	{
-		let { proof, publicSignals } = await snarkjs.groth16.fullProve(input_claimC, "circuits/circuit_claim_js/circuit_claim.wasm", "circuits/circuit_claim_0001.zkey");
+		let { proof, publicSignals } = await snarkjs.groth16.fullProve(input_claimA, "circuits/circuit_claim_js/circuit_claim.wasm", "circuits/circuit_claim_0001.zkey");
 
 
 		console.log("Public: ");
@@ -305,10 +306,11 @@ async function main() {
 
 		response = await instanceCollateralBet.methods.five(calldata[0], calldata[1], calldata[2],
 			calldata[3]).send({
-				from: c_address,
+				from: a_address,
 				gas: 4000000
 			}).catch(err => {
 				console.log(err);
+				console.log(err.message)
 			})
 
 		try { console.log(response.transactionHash) } catch (err) { }
@@ -320,18 +322,20 @@ async function main() {
 		})
 		console.log(response);
 
-		*/
 
 
-	console.log("New balance for C");
-	response = await instanceCollateralToken.methods.balanceOf(c_address).call().catch(err => {
-		console.log(err);
-	})
 
-	console.log(response);
+		console.log("New balance for A");
+		response = await instanceCollateralToken.methods.balanceOf(a_address).call().catch(err => {
+			console.log(err);
+		})
+
+		console.log(response);
 
 
-	process.exit();
+		process.exit();
+
+	}
 
 }
 

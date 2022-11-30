@@ -74,6 +74,7 @@ async function main() {
 
 	}
 
+	
 	console.log("Setting the minter");
 	response = await instanceCollateralToken.methods.addMinter(contractAddresses.collateralBet).send({
 		from: config.account,
