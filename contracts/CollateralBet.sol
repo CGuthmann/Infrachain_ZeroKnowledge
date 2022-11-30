@@ -115,13 +115,14 @@ contract CollateralBet is Ownable {
     }
 
     //TODO: execute approve @FUND_OWNER@, @THIS_CONTRACT_ADDRESS@ before transferFrom(...)
-    function deposit(uint256 _amount) public payable {
+    function deposit(uint256 _amount) public payable returns (uint256) {
         uint256 _requiredAmount = 1;
         require(_amount == _requiredAmount, "Amount is not equal to 1"); // the smart contract
-        ERC20BurnableInterface.transferFrom(msg.sender, address(this), _amount);
+        //ERC20BurnableInterface.transferFrom(msg.sender, address(this), _amount);
 
-        register(msg.sender);
-        _start();
+        // register(msg.sender);
+        // _start();
+        return 1;
     }
 
     function register(address _participantAddress) internal {

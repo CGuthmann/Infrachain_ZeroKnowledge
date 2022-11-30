@@ -28,7 +28,7 @@ const web3 = new Web3(provider);
 
 
 const account = config.account;
-const delay = 1;
+const delay = 3;
 
 const ParticipantAddress = '';
 const TotalVerifierAddress = '';
