@@ -67,9 +67,11 @@ async function groth16ExportSolidityCallData(proof, pub) {
 
 function printState(state){
     let keys = Object.keys(state);
-    for(let i = keys.length / 2; i < keys.length; i++){
+	console.log("{");
+    for(let i = (keys.length / 2)+3; i < keys.length; i++){
         console.log(keys[i] + ": " + state[keys[i]])
     }
+	console.log("}")
 }
 
 async function main() {
