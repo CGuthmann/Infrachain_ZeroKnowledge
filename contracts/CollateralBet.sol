@@ -23,7 +23,7 @@ interface Verifier_circuit_total {
         uint256[2] memory a,
         uint256[2][2] memory b,
         uint256[2] memory c,
-        uint256[3] memory input
+        uint256[4] memory input
     ) external view returns (bool r);
 }
 
@@ -33,7 +33,7 @@ interface Verifier_circuit_claim {
         uint256[2] memory a,
         uint256[2][2] memory b,
         uint256[2] memory c,
-        uint256[3] memory input
+        uint256[2] memory input
     ) external view returns (bool r);
 }
 
@@ -227,19 +227,71 @@ contract CollateralBet is Ownable {
         }
 
 
-    function two() external {
-        address _bAddress = msg.sender;
+    function two(
+        // encrypted value
+        uint256[2] memory a, 
+        uint256[2][2] memory b,
+        uint256[2] memory c,
+        uint256[3] memory input
+    ) external {
+            uint index = addressToState[msg.sender];
+
+            require(state[index].stage == Stage.One, "Game is not in stage 1 (it is not B's turn)");
+            require(state[index].bAddress == msg.sender, "Sender is not role B");
+            require(input[2] == state[index].comRA, "B is not adding to A's value");
+            require(verifierCircuitParticipantsInterface.verifyProof(a, b, c, input), "Proof invalid");
+
+            state[index].comB = input[0];
+            state[index].comRAB = input[2];
+            // set encrypted value        
     }
 
-    function three() external {
-        address _cAddress = msg.sender;
+    function three(
+        // encrypted value
+        uint256[2] memory a, 
+        uint256[2][2] memory b,
+        uint256[2] memory c,
+        uint256[3] memory input) external 
+    {
+            uint index = addressToState[msg.sender];
+
+            require(state[index].stage == Stage.Two, "Game is not in stage 2 (it is not C's turn)");
+            require(state[index].cAddress == msg.sender, "Sender is not role C");
+            require(input[2] == state[index].comRAB, "C is not adding to B's value");
+            require(verifierCircuitParticipantsInterface.verifyProof(a, b, c, input), "Proof invalid");
+
+            state[index].comC = input[0];
+            state[index].comRABC = input[2];
+            // set encrypted value    
     }
 
-    function four() external {
-        address _aAddress = msg.sender;
+    function four(
+        uint256[2] memory a, 
+        uint256[2][2] memory b,
+        uint256[2] memory c,
+        uint256[4] memory input) external {
+            uint index = addressToState[msg.sender];
+
+            require(state[index].stage == Stage.Three, "Game is not in stage 3 (it is not A's second turn)");
+            require(state[index].aAddress == msg.sender, "Sender is not role A");
+            require(input[0] == state[index].comA, "C is not adding to B's value");
+            require(input[1] == state[index].comRABC, "C is not adding to B's value");
+            require(input[2] == state[index].comRA, "C is not adding to B's value");
+            require(verifierCircuitTotalInterface.verifyProof(a, b, c, input), "Proof invalid");
+
+            state[index].total = input[3];
+            // set encrypted value    
     }
 
-    function five() external {}
+    function five(
+        uint256[2] memory a, 
+        uint256[2][2] memory b,
+        uint256[2] memory c,
+        uint256[2] memory input
+    ) external {
+
+        uint index = addressToState[msg.sender];
+    }
 
     function burnTokens() internal {
         ERC20BurnableInterface.burn(
