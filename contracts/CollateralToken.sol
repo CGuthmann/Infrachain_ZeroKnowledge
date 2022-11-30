@@ -63,9 +63,6 @@ contract CollateralToken is ERC20, ERC20Burnable, Pausable, AccessControl {
         _burn(from, amount);
     }
 
-    //PAUSING
-    //TODO: could be a role of pauser >> bytes32 public constant MINTER_ROLE = keccak256("MINTER");
-
     function pause() public onlyRole(DEFAULT_ADMIN_ROLE) {
         _pause();
     }
