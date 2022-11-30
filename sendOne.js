@@ -96,6 +96,16 @@ async function main() {
 		contractAddresses.collateralBet
 	)
 
+	const artifactCollateralToken = require("./build/contracts/CollateralToken.json");
+
+	// console.log(artifact.abi);
+	// console.log(addressContract);
+
+	const instanceCollateralToken = new web3.eth.Contract(
+		artifactCollateralToken.abi,
+		contractAddresses.collateralToken
+	)
+
 	let response;
 
 	console.log("Get state for game");
@@ -108,6 +118,7 @@ async function main() {
 	let b_address = response.bAddress;
 	let c_address = response.cAddress;
 
+	/*
 
 	console.log(a_address);
 
@@ -308,7 +319,16 @@ async function main() {
 			console.log(err);
 		})
 		console.log(response);
-	}
+
+		*/
+
+
+	console.log("New balance for C");
+	response = await instanceCollateralToken.methods.balanceOf(c_address).call().catch(err => {
+		console.log(err);
+	})
+
+	console.log(response);
 
 
 	process.exit();

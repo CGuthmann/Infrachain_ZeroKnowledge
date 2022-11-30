@@ -35,6 +35,8 @@ const TotalVerifierAddress = '';
 const ClaimVerifierAddress = '';
 const CollateralTokenAddress = '';
 
+const accounts = require("./mock_addresses.json");
+
 
 async function main() {
 
@@ -81,6 +83,8 @@ async function main() {
 	console.log("ParticipantVerifier deployed at: ", contractParticipantVerifierInstance._address);
 
 
+    //let resp = await web3.eth.sendTransaction({ "from": accounts[2].address, "to": accounts[0].address, "value": 100000000000000000000, "gas": 4000000 })
+	//console.log(resp);
 
 
 
@@ -118,6 +122,8 @@ async function main() {
     console.log("TotalVerifier deployed at: ", contractTotalVerifierInstance._address);
 
 
+    //resp = await web3.eth.sendTransaction({ "from": accounts[2].address, "to": accounts[0].address, "value": 100000000000000000000, "gas": 4000000 })
+	//console.log(resp);
 
 
 
