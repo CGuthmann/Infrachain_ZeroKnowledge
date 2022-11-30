@@ -1,4 +1,8 @@
 export default {
+  server:{
+    port:3000,
+    host:'0',
+  },
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
@@ -52,6 +56,9 @@ export default {
       customProperties: true,
     },
   },
+  build: {
+    postcss: null,
+  }
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
 };

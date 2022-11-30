@@ -68,7 +68,6 @@
     <!-- -----------------------------------------------
     ./ Testimonial
     ----------------------------------------------- -->
-    <Blog />
     <!-- -----------------------------------------------
     C2a
     ----------------------------------------------- -->
@@ -121,7 +120,6 @@ export default {
     Pricing: () => import("@/components/custom/pricing/Pricing"),
     Team: () => import("@/components/custom/team/Team"),
     Testimonial: () => import("@/components/custom/testimonial/Testimonial"),
-    Blog: () => import("@/components/custom/blogs/Blog"),
     C2a1: () => import("@/components/custom/c2a/C2a1"),
     C2a2: () => import("@/components/custom/c2a/C2a2"),
     Contact: () => import("@/components/custom/contact/Contact"),
