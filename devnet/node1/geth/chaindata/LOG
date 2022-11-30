@@ -1,0 +1,30 @@
+=============== Aug 17, 2021 (CEST) ===============
+09:55:16.576323 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+09:55:16.603920 db@open opening
+09:55:16.605009 version@stat F·[] S·0B[] Sc·[]
+09:55:16.610966 db@janitor F·2 G·0
+09:55:16.611026 db@open done T·7.059643ms
+09:55:16.614718 db@close closing
+09:55:16.614875 db@close done T·156.558µs
+=============== Aug 24, 2021 (CEST) ===============
+11:02:58.652848 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+11:02:58.655100 version@stat F·[] S·0B[] Sc·[]
+11:02:58.655147 db@open opening
+11:02:58.655253 journal@recovery F·1
+11:02:58.657507 journal@recovery recovering @1
+11:02:58.662984 memdb@flush created L0@2 N·17 S·1KiB "H{\x9d..0\xba\x95,v10":"\xf9\xac\x88..\xce\x14\x18,v7"
+11:02:58.663228 version@stat F·[1] S·1KiB[1KiB] Sc·[0.25]
+11:02:58.709831 db@janitor F·3 G·0
+11:02:58.709892 db@open done T·54.727961ms
+11:02:58.714492 db@close closing
+11:02:58.714709 db@close done T·215.022µs
+=============== Aug 24, 2021 (UTC) ===============
+09:04:54.322015 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+09:04:54.348073 version@stat F·[1] S·1KiB[1KiB] Sc·[0.25]
+09:04:54.350101 db@open opening
+09:04:54.353842 journal@recovery F·1
+09:04:54.361266 journal@recovery recovering @3
+09:04:54.384919 memdb@flush created L0@5 N·1 S·387B "eth..0\xba\x95,v19":"eth..0\xba\x95,v19"
+09:04:54.394575 version@stat F·[2] S·1KiB[1KiB] Sc·[0.50]
+09:04:54.435334 db@janitor F·4 G·0
+09:04:54.436453 db@open done T·83.7932ms
