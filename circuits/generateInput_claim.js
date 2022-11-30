@@ -14,7 +14,7 @@ const input_total = require("./input_total.json");
 async function createInputs() {
 
     const input_claimA = {
-        "totalSum": input_total.totalSum,
+        "totalSum": input_total.totalSum - input_A.current_sum,
         "private_consumption": input_A.private_consumption
     }
 
@@ -23,7 +23,7 @@ async function createInputs() {
     fs.writeFileSync("input_claimA.json", JSON.stringify(input_claimA, null, 4));
 
     const input_claimB = {
-        "totalSum": input_total.totalSum,
+        "totalSum": input_total.totalSum - input_A.current_sum,
         "private_consumption": input_B.private_consumption
     }
 
@@ -32,7 +32,7 @@ async function createInputs() {
     fs.writeFileSync("input_claimB.json", JSON.stringify(input_claimB, null, 4));
 
     const input_claimC = {
-        "totalSum": input_total.totalSum,
+        "totalSum": input_total.totalSum - input_A.current_sum,
         "private_consumption": input_C.private_consumption
     }
 

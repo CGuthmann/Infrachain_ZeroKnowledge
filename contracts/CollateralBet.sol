@@ -312,8 +312,8 @@ contract CollateralBet is Ownable {
     ) external {
         require(msg.sender != address(0), "Transition fro 0 not allowed");
         uint index = addressToState[msg.sender];
-        /*require(state[index].stage == Stage.Four, "Game is not in stage 4 (the mpc is not completed)");
-        require(state[index].total == input[1]);*/
+        require(state[index].stage == Stage.Four, "Game is not in stage 4 (the mpc is not completed)");
+        require(state[index].total == input[1]);
         
         if(msg.sender == state[index].aAddress){
             require(state[index].comA == input[0]);
