@@ -59,7 +59,4 @@ export default {
   build: {
     postcss: null,
   }
-
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
 };
