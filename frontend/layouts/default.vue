@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { initWeb3 } from '@/web3';
 export default {
   head() {
     return {
@@ -27,8 +28,13 @@ export default {
     Header: () => import("@/layouts/sections/Header2"),
     Footer: () => import("@/layouts/sections/Footer")
   },
-  methods: {}
+  methods: {},
+  mounted() {
+    initWeb3()
+  }
 };
 </script>
 
-<style></style>
+<style>
+
+</style>
