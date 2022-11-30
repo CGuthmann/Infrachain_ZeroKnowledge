@@ -83,7 +83,10 @@ async function main() {
 	})
 
 	console.log(response);
-	console.log(response.events.RoleGranted.returnValues);
+	try {
+		console.log(response.events.RoleGranted.returnValues);
+	} catch (err) { }
+
 
 	console.log("Setting the burner");
 	response = await instanceCollateralToken.methods.addBurner(contractAddresses.collateralBet).send({
@@ -94,8 +97,9 @@ async function main() {
 	})
 
 	console.log(response);
-	console.log(response.events.RoleGranted.returnValues);
-
+	try {
+		console.log(response.events.RoleGranted.returnValues);
+	} catch (err) { }
 
 	const artifactCollateralBet = require("./build/contracts/CollateralBet.json");
 
@@ -106,6 +110,12 @@ async function main() {
 		artifactCollateralBet.abi,
 		contractAddresses.collateralBet
 	)
+
+	console.log("Token address in Bet contract");
+	response = await instanceCollateralBet.methods.tokenAddress().call().catch(err => {
+		console.log(err);
+	})
+	console.log(response);
 
 
 
@@ -154,8 +164,9 @@ async function main() {
 		})
 
 		console.log(response);
-		console.log(response.event.Transfer.returnValues);
-
+		try {
+			console.log(response.event.Transfer.returnValues);
+		} catch (err) {}
 	}
 
 
