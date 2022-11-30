@@ -145,7 +145,7 @@ contract CollateralBet is Ownable {
         _start();
     }
 
-    function _start() internal onlyIfEpochEnded {
+    function _start() internal {
         require(
             registeredParticipants.length > 0,
             "Number of participants is 0"
