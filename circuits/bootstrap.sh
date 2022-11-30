@@ -8,5 +8,6 @@ node generateInput_A.js
 node generateInput_B.js
 node generateInput_C.js
 node generateInput_total.js
+node generateInput_claim.js
 
 node generateInput_A_claim.js
