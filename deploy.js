@@ -28,7 +28,7 @@ const web3 = new Web3(provider);
 
 
 const account = config.account;
-const delay = 3000;
+const delay = 5000;
 
 const ParticipantAddress = '';
 const TotalVerifierAddress = '';
@@ -65,10 +65,10 @@ async function main() {
 
 	contractParticipantVerifierInstance = await contractParticipantVerifierSend.send({
 		from: config.account,
-		gas: 3500000
+		gas: 4000000
 	})
 
-	await new Promise(r => setTimeout(r, delay));
+	await new Promise(r => setTimeout(r, 2* delay));
     }else {
         const artifact = require("./build/contracts/Verifier_circuit_participant.json");
 
@@ -78,7 +78,7 @@ async function main() {
         )
     }
 
-	console.log("ParticipantVerifier deployed at: ",contractParticipantVerifierInstance._address);
+	console.log("ParticipantVerifier deployed at: ", contractParticipantVerifierInstance._address);
 
 
 
@@ -100,7 +100,7 @@ async function main() {
 
         contractTotalVerifierInstance = await contractTotalVerifierSend.send({
             from: config.account,
-            gas: 4000005
+            gas: 4000000
         })
 
         
@@ -111,11 +111,11 @@ async function main() {
 
         contractTotalVerifierInstance = new web3.eth.Contract(
             artifact.abi,
-            ParticipantAddress
+            TotalVerifierAddress
         )
     }
 
-    console.log("TotalVerifier deployed at: ",contractTotalVerifierInstance._address);
+    console.log("TotalVerifier deployed at: ", contractTotalVerifierInstance._address);
 
 
 
@@ -139,7 +139,7 @@ async function main() {
 
         contractClaimVerifierInstance = await contractClaimVerifierSend.send({
             from: config.account,
-            gas: 4000005
+            gas: 4000000
         })
 
 
@@ -150,11 +150,11 @@ async function main() {
 
         contractClaimVerifierInstance = new web3.eth.Contract(
             artifact.abi,
-            ParticipantAddress
+            ClaimVerifierAddress
         )
     }
 
-    console.log("ClaimVerifier deployed at: ",contractClaimVerifierInstance._address);
+    console.log("ClaimVerifier deployed at: ", contractClaimVerifierInstance._address);
 
 
 
@@ -176,21 +176,21 @@ async function main() {
 
         contractCollateralTokenInstance = await contractCollateralTokenSend.send({
             from: config.account,
-            gas: 4000005
+            gas: 4000000
         })
 
 
 
-        await new Promise(r => setTimeout(r, delay));
+        await new Promise(r => setTimeout(r, 2 * delay));
     }else {
         const artifact = require("./build/contracts/CollateralToken.json");
 
-        contractParticipantVerifierInstance = new web3.eth.Contract(
+        contractCollateralTokenInstance = new web3.eth.Contract(
             artifact.abi,
-            ParticipantAddress
+            CollateralTokenAddress
         )
     }
-    console.log("CollateralToken deployed at: ",contractCollateralTokenInstance._address);
+    console.log("CollateralToken deployed at: ", contractCollateralTokenInstance._address);
     contractAddresses.collateralToken = contractCollateralTokenInstance._address;
 
 
@@ -211,9 +211,9 @@ async function main() {
 
 	const contractCollateralBetInstance = await contractCollateralBetSend.send({
 		from: config.account,
-		gas: 3500000
+		gas: 4000000
 	})
-    console.log("MainVerifier deployed at: ",contractCollateralBetInstance._address);
+    console.log("MainVerifier deployed at: ", contractCollateralBetInstance._address);
 
     contractAddresses.collateralBet = contractCollateralBetInstance._address;
 
