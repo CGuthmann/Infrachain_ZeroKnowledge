@@ -10,7 +10,7 @@ docker-compose down
 docker-compose up -d
 cd ..
 
-sleep 10
+sleep 15
 
 # cd circuits
 # ./bootstrap.sh

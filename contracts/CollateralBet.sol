@@ -65,7 +65,7 @@ contract CollateralBet is Ownable {
         uint256 total;
     }
 
-    Container[] state;
+    Container[] public state;
 
     mapping(address => uint256) public addressToState;
 
@@ -117,10 +117,10 @@ contract CollateralBet is Ownable {
     function deposit(uint256 _amount) public payable returns (uint256) {
         uint256 _requiredAmount = 1;
         require(_amount == _requiredAmount, "Amount is not equal to 1"); // the smart contract
-        //ERC20BurnableInterface.transferFrom(msg.sender, address(this), _amount);
+        ERC20BurnableInterface.transferFrom(msg.sender, address(this), _amount);
 
-        // register(msg.sender);
-        // _start();
+        register(msg.sender);
+        //_start();
         return 1;
     }
 
@@ -165,11 +165,9 @@ contract CollateralBet is Ownable {
     {
         uint256 length = _unprocessedArray.length;
         uint256 residuum = length % 3;
-        if (residuum != 0) {
-            for (uint256 i = length - 1; i < length - residuum; i--) {
-                mintTokens(_unprocessedArray[i], 1);
-                delete _unprocessedArray[i];
-            }
+        for (uint256 i = length - residuum; i < length; i++) {
+            mintTokens(_unprocessedArray[i], 1);
+            delete _unprocessedArray[i];
         }
         return _unprocessedArray;
     }
