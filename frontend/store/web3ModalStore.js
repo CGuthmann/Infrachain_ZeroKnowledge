@@ -1,4 +1,4 @@
-import { getLibrary } from "@/utils/web3";
+/* import { getLibrary } from "@/utils/web3";
 import { ethers } from "ethers";
 import { parseInt } from "lodash";
 
@@ -9,7 +9,7 @@ const web3ModalStore = {
     library: getLibrary(),
     active: false,
     account: null,
-    chainId: 0
+    chainId: 0,
   },
   mutations: {
     setWeb3Modal(state, web3Modal) {
@@ -26,7 +26,7 @@ const web3ModalStore = {
     },
     setChainId(state, chainId) {
       state.chainId = chainId;
-    }
+    },
   },
   actions: {
     async connect({ state, commit, dispatch }) {
@@ -45,13 +45,13 @@ const web3ModalStore = {
       commit("setChainId", network.chainId);
       commit("setActive", true);
 
-      provider.on("connect", async info => {
+      provider.on("connect", async (info) => {
         let chainId = parseInt(info.chainId);
         commit("setChainId", chainId);
         console.log("connect", info);
       });
 
-      provider.on("accountsChanged", async accounts => {
+      provider.on("accountsChanged", async (accounts) => {
         if (accounts.length > 0) {
           commit("setAccount", accounts[0]);
         } else {
@@ -59,7 +59,7 @@ const web3ModalStore = {
         }
         console.log("accountsChanged");
       });
-      provider.on("chainChanged", async chainId => {
+      provider.on("chainChanged", async (chainId) => {
         chainId = parseInt(chainId);
         commit("setChainId", chainId);
         console.log("chainChanged", chainId);
@@ -74,7 +74,8 @@ const web3ModalStore = {
       commit("setAccount", null);
       commit("setActive", false);
       commit("setLibrary", getLibrary());
-    }
-  }
+    },
+  },
 };
 export default web3ModalStore;
+ */
