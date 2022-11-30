@@ -252,7 +252,7 @@ contract CollateralBet is Ownable {
 
             require(state[index].stage == Stage.One, "Game is not in stage 1 (it is not B's turn)");
             require(state[index].bAddress == msg.sender, "Sender is not role B");
-            require(input[2] == state[index].comRA, "B is not adding to A's value");
+            require(input[1] == state[index].comRA, "B is not adding to A's value");
             require(verifierCircuitParticipantsInterface.verifyProof(a, b, c, input), "Proof invalid");
 
             state[index].comB = input[0];
@@ -273,7 +273,7 @@ contract CollateralBet is Ownable {
 
             require(state[index].stage == Stage.Two, "Game is not in stage 2 (it is not C's turn)");
             require(state[index].cAddress == msg.sender, "Sender is not role C");
-            require(input[2] == state[index].comRAB, "C is not adding to B's value");
+            require(input[1] == state[index].comRAB, "C is not adding to B's value");
             require(verifierCircuitParticipantsInterface.verifyProof(a, b, c, input), "Proof invalid");
 
             state[index].comC = input[0];
