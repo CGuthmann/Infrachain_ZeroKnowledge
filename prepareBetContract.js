@@ -172,7 +172,7 @@ async function main() {
 
 
 	console.log("Get registered participants");
-	response = await instanceCollateralBet.methods.registeredParticipants(5).call().catch(err => {
+	response = await instanceCollateralBet.methods.registeredParticipants(1).call().catch(err => {
 		console.log(err);
 	})
 
