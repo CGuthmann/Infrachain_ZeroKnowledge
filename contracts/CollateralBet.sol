@@ -303,6 +303,10 @@ contract CollateralBet is Ownable {
             // set encrypted value    
 
             state[index].stage = Stage.Four;
+
+            mintTokens(state[index].aAddress, 1);
+            mintTokens(state[index].bAddress, 1);
+            mintTokens(state[index].cAddress, 1);
     }
 
     function five(
@@ -313,7 +317,7 @@ contract CollateralBet is Ownable {
     ) external {
 
         uint index = addressToState[msg.sender];
-        require(state[index].stage == Stage.Three, "Game is not in stage 4 (the mpc is not completed)");
+        require(state[index].stage == Stage.Four, "Game is not in stage 4 (the mpc is not completed)");
         require(state[index].total == input[1]);
         if(msg.sender == state[index].aAddress)
             require(state[index].comA == input[0]);
@@ -324,8 +328,7 @@ contract CollateralBet is Ownable {
 
         require(verifierCircuitClaimInterface.verifyProof(a, b, c, input),"Proof invalid");
 
-        //TODO give token
-        
+        mintTokens(msg.sender, 10);        
     }
 
     function burnTokens() internal {
