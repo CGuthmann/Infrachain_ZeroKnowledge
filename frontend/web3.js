@@ -1,6 +1,8 @@
 import Web3 from "web3";
+import {encrypt, decrypt, getEncryptionPublicKey} from "./secureCommunication";
 
 export let web3 = new Web3();
+
 
 export async function initWeb3() {
   console.debug("initWeb3()")
@@ -709,21 +711,36 @@ export async function initWeb3() {
     const guy = "0x7e026f90A727259a1dB94cC9453410Bd6d128022"
     const response = await instanceCollateralToken.methods.balanceOf(guy).call()
       .catch(err => {
-      console.error(err);
-    })
+        console.error(err);
+      })
     console.debug("initWeb3() response >> ", response)
 
+    //
+    // const owner = "0xd2f82E45C337Ea7Af8F9f59F185fAc420DcdD459"
+    // const guyToBeMinted = "0x2e541E159f023c189C4c8B6402F40f274Ceb8464"
+    // let mintResponse = await instanceCollateralToken.methods.mint(guyToBeMinted, 1).send({
+    //   from: owner,
+    //   gas: 4000000
+    // }).catch(err => {
+    //   console.log(err);
+    // })
+    //
+    // console.debug("initWeb3() mintResponse >> ", mintResponse)
+    // console.debug("initWeb3() mintResponse.events.Transfer.returnValues >> ", mintResponse.events.Transfer.returnValues)
 
-    const owner = "0xd2f82E45C337Ea7Af8F9f59F185fAc420DcdD459"
-    const guyToBeMinted = "0x2e541E159f023c189C4c8B6402F40f274Ceb8464"
-    let mintResponse = await instanceCollateralToken.methods.mint(guyToBeMinted, 1).send({
-      from: owner,
-      gas: 4000000
-    }).catch(err => {
-      console.log(err);
-    })
+    /*
+    We give our key to somebody who will encrypt his message by our Wallet Address
+    Then we get an encrypted message
+    Using our private key, we can decrypt the message, encrypted by our Wallet Address
+    */
+    const plainMessage = "we will win"
+    console.debug("message >> ", plainMessage)
+    const myEncryptionPublicKey = await getEncryptionPublicKey()
+    console.debug("myEncryptionPublicKey >> ", myEncryptionPublicKey)
 
-    console.debug("initWeb3() mintResponse >> ", mintResponse)
-    console.debug("initWeb3() mintResponse.events.Transfer.returnValues >> ", mintResponse.events.Transfer.returnValues)
+    const encryptedMessage = await encrypt(plainMessage, myEncryptionPublicKey)//Somebody encrypts by my Wallet Address
+    console.debug("encryptedMessage >> ", encryptedMessage)
+    const decryptedMessage = await decrypt(encryptedMessage)//MetaMask will request an access to use your private key for decryption
+    console.debug("decryptedMessage >> ", decryptedMessage)
   }
 }
