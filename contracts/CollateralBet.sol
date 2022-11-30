@@ -91,7 +91,7 @@ contract CollateralBet is Ownable {
         address verifierCircuitClaimContract
     ) {
         tokenAddress = _tokenAddress; //TODO: better have additional checks
-        ERC20BurnableInterface = ERC20Burnable(tokenAddress);
+        ERC20BurnableInterface = CollateralToken(tokenAddress);
         updateEpochTimestamp();
 
         VerifierCircuitParticipantsInterface = Verifier_circuit_participants(
