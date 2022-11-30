@@ -17,7 +17,7 @@ By using a blockchain as a neutral, modular, and non-discriminatory public digit
 To run the demo, several dependencies must be installed: 
 - For backend and frontend in general: 
     - node
-    - truffle (globablly)
+    - truffle (as global npm package)
 
 - For running the public sector blockchain testnet: 
     - docker
@@ -27,13 +27,28 @@ To run the demo, several dependencies must be installed:
     - rust
     - circom
 
-These dependencies can be installed via ```bootstrap.sh```
+These dependencies can be installed via ```bootstrap.sh``` on Ubuntu. Also, ```npm install``` must be run in both the main folder and the circuits folder.
 
 
 ## Bootstrapping the smart contracts
-In total, 5 different smart contracts will be deployed: 
-    - 3 smart contract verifiers for zero-knowledge proofs, corresponding to the different steps of the multi-party computation of the average and claiming rewards
-    - one ERC20 token contract for the incentives and deposits (CollateralToken)
-    - one contract that users directly interact with to play the game (CollateralBet) 
+
+In total, 5 different smart contracts will be deployed:
+
+- 3 smart contract verifiers for zero-knowledge proofs, corresponding to the different steps of the multi-party computation of the average and claiming rewards
+- one ERC20 token contract for the incentives and deposits (CollateralToken)
+- one contract that users directly interact with to play the game (CollateralBet) 
 
 Before the smart contract verifiers for zero-knowledge proofs can be deployed, a trusted setup must be executed. We simulate this locally for the demo. The startup of the public sector blockchain and the subsequent deployment of all smart contracts can be started via ```node deploy.js``` 
+
+## Playing the game in the cli
+
+We can test the deployment by running a game where all three participants are controlled locally by running ```node prepareBetContract.js```. This will 
+- Connect the ERC20 token with the main contract for the game
+- Initialize the three players with some Ether to pay for the transaction fees
+- Supply the three players with one token so they can register
+- Unlocking the token to be controlled by the BetContract
+- Finally register the three players. 
+
+Once a player registers and the time is such that the game is supposed to start, the smart contract will automatically randomly assign groups of three players (potentially kicking two players out). After that, the five stages of the game will be sequentially executed: 
+
+- aa
