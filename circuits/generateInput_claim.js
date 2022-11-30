@@ -20,25 +20,27 @@ async function createInputs() {
 
     console.log(input_claimA);
 
-    fs.writeFileSync("input_claimA.json", JSON.stringify(input_total, null, 4));
+    fs.writeFileSync("input_claimA.json", JSON.stringify(input_claimA, null, 4));
 
     const input_claimB = {
         "totalSum": input_total.totalSum,
         "private_consumption": input_B.private_consumption
     }
 
-    console.log(input_claimA);
+    console.log(input_claimB);
 
-    fs.writeFileSync("input_claimB.json", JSON.stringify(input_total, null, 4));
+    fs.writeFileSync("input_claimB.json", JSON.stringify(input_claimB, null, 4));
 
     const input_claimC = {
         "totalSum": input_total.totalSum,
         "private_consumption": input_C.private_consumption
     }
 
-    console.log(input_claimA);
+    console.log(input_claimC);
 
-    fs.writeFileSync("input_claimC.json", JSON.stringify(input_total, null, 4));
+    fs.writeFileSync("input_claimC.json", JSON.stringify(input_claimC, null, 4));
+    
 }
+
 
 createInputs();
