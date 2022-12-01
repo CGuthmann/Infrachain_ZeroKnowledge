@@ -37,9 +37,8 @@ template rsa_encrypt(n){
 
     for(var i = 0; i < n-1 ; i++){
         factors[i+1] <==  trace[i] * second_powers_m.out[i+1];
-        nfactors[i] <== (1-e_bits.out[i+1])*trace[i];
 
-        trace[i+1] <== e_bits.out[i+1] * factors[i+1]+nfactors[i];
+        trace[i+1] <== e_bits.out[i+1] * (factors[i+1]-trace[i])+trace[i];
     }
 
     signal output c <-- trace[n-1] % N;
