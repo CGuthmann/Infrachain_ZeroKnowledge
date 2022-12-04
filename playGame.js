@@ -32,7 +32,7 @@ const input_A = require("./circuits/input_A.json");
 const input_B = require("./circuits/input_B.json");
 const input_C = require("./circuits/input_C.json");
 const input_total = require("./circuits/input_total.json")
-const input_claimA = require("./circuits/input_A_claim.json")
+const input_claimA = require("./circuits/input_claimA.json")
 const input_claimC = require("./circuits/input_claimC.json")
 
 
