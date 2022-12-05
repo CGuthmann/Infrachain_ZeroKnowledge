@@ -41,7 +41,11 @@ template rsa_encrypt(n){
     e_bits.in <== e;
 
     signal factors[n];
+
     signal trace[n];
+    signal ftrace[n];
+    signal prods[n];
+
     signal nfactors[n];
 
     factors[0] <== e_bits.out[0]* second_powers_m.out[0];
@@ -50,7 +54,11 @@ template rsa_encrypt(n){
     for(var i = 0; i < n-1 ; i++){
         factors[i+1] <==  trace[i] * second_powers_m.out[i+1];
 
-        trace[i+1] <== e_bits.out[i+1] * (factors[i+1]-trace[i])+trace[i];
+        prods[i+1] <== e_bits.out[i+1] * (factors[i+1]-trace[i])+trace[i];
+        trace[i+1] <-- prods[i+1] % N;
+        ftrace[i+1] <-- prods[i+1] \N;
+
+        prods[i+1] === ftrace[i+1] *N + trace[i+1] ;
     }
 
     signal output c <-- trace[n-1] % N;
