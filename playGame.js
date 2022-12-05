@@ -314,6 +314,7 @@ async function main() {
 
 		// try { console.log(response.transactionHash) } catch (err) { }
 
+
 		console.log("\n");
 
 		console.log("Get state for game after stage four");
@@ -322,6 +323,8 @@ async function main() {
 		})
 		printState(response);
 	}
+
+	await new Promise(r => setTimeout(r, 5000));
 	
 	{
 		let { proof, publicSignals } = await snarkjs.groth16.fullProve(input_claimA, "circuits/circuit_claim_js/circuit_claim.wasm", "circuits/circuit_claim_0001.zkey");
