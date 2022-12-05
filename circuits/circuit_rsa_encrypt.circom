@@ -1,14 +1,25 @@
 pragma circom 2.0.6;
 include "../node_modules/circomlib/circuits/bitify.circom";
 
-//calculates in^(2^0), in^(2^1 ),..., in^(2^(n-1))
+//calculates in^(2^0), in^(2^1 ),..., in^(2^(n-1)) mod N
 template second_powers(n){
     signal input in;
+    signal input N;
     signal output out[n];
+    signal fac[n];
+    signal s[n];
 
-    out[0] <== in;
+    out[0] <-- in % N;
+    fac[0] <-- in \ N;  
+
+    in === N*fac[0]+ out[0];
+
     for(var i = 0; i <n-1;i++){
-        out[i+1] <== out[i] * out[i];
+        s[i+1] <== out[i] * out[i];
+        out[i+1] <-- s[i+1]%N;
+        fac[i+1] <-- s[i+1]\N;
+        
+        s[i+1] === N*fac[i+1]+ out[i+1];
     }
 }
 
@@ -24,6 +35,7 @@ template rsa_encrypt(n){
 
     component second_powers_m = second_powers(n);
     second_powers_m.in <== m;
+    second_powers_m.N <== N;
 
     component  e_bits = Num2Bits(n);
     e_bits.in <== e;
