@@ -1,54 +1,11 @@
 <template>
-  <div>
-    <!-- -----------------------------------------------
-          Start Header
-    ----------------------------------------------- -->
-    <v-app-bar app class="app-header position-relative bg-dark" flat>
-      <v-container class="py-0 fill-height">
-        <!-- Logo -->
-        <Logo />
-        <!-- <div class="logo">
-          <NLink to="/">
-            <v-img :src="require('@/assets/images/logos/Logo_large.png')" alt="logo" />
-          </NLink>
-        </div> -->
+  <nav id="vue">
+    <div class="menu-item">
+      <router-link to="/competition">Initiate MPC</router-link>
+    </div>
+    <Status title="Status"/>
 
-        <v-spacer></v-spacer>
-
-
-        <!-- Desktop view Navigation -->
-        <div class="navigation" v-bind:class="[isActive ? 'd-block' : '']" @click="isActive = !isActive">
-          <ul class="navbar-nav">
-            <li class="nav-item" text>
-              <n-link class="nav-link" nuxt to="/test"> Energy consumtion </n-link>
-            </li>
-            <li class="nav-item" text>
-              <n-link class="nav-link" nuxt to="/competition"> Competition </n-link>
-            </li>
-            <li class="nav-item" text>
-              <n-link class="nav-link" nuxt to="/status"> Status </n-link>
-            </li>
-
-          </ul>
-        </div>
-        <!-- login-regiter -->
-        <v-btn v-if="!connectedWallet" @click="connectedWallet = true" class=" d-lg-flex btn-custom-nm ml-5" nuxt
-          depressed color="primary" to="/" elevation="0">
-          Connect wallet
-        </v-btn>
-        <v-btn v-else @click="connectedWallet = false" class=" d-lg-flex btn-custom-nm ml-5" nuxt depressed
-          color="error" to="/" elevation="0">
-          Disconnect wallet
-        </v-btn>
-        <v-btn class="d-block d-md-none" color="white" text @click="toggleClass()">
-          <v-app-bar-nav-icon class="white--text" />
-        </v-btn>
-      </v-container>
-    </v-app-bar>
-    <!-- -----------------------------------------------
-          End Header
-    ----------------------------------------------- -->
-  </div>
+  </nav>
 </template>
 
 <script>
@@ -70,8 +27,33 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-.logo a {
+<style>
+nav {
+  width: 100vw;
+  background-color: #0d0d0e;
   display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+nav .menu-item {
+  color: #FFF;
+  padding: 25px 40px;
+  position: relative;
+  text-align: center;
+  border-bottom: 5px solid transparent;
+  display: flex;
+  transition: 0.4s;
+}
+
+nav .menu-item.active,
+nav .menu-item:hover {
+  background-color: #0d0d0e;
+  border-bottom-color: #5C1A81;
+}
+
+nav .menu-item a {
+  color: inherit;
+  text-decoration: none;
 }
 </style>

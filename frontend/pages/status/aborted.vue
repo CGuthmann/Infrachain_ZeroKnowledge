@@ -6,10 +6,10 @@
                     <v-col cols="12" sm="10" md="9" lg="7">
                         <div class="text-center">
                             <h2 class="section-title font-weight-medium">
-                                Competition status
+                                Interrupted round
                             </h2>
                             <p>
-                                Observe the realtime status of the current competition
+                                You didn't submit your financial data in time!
                             </p>
                         </div>
                     </v-col>
@@ -20,7 +20,7 @@
                     <v-col cols="12" md="4" lg="4" class="d-flex">
                         <v-card>
                             <v-card-text class="text-center justify-center">
-                                <h2 class="mb-16">Competition #1324536</h2>
+                                <h2 class="mb-16">Financial MPC #1324536</h2>
                                 <div>
                                     <div class="feature1-component">
 
@@ -30,7 +30,7 @@
                                         </div>
                                     </div>
                                     <h3 class="mb-4">Aborted!</h3>
-                                    <h4>1 ETH (deposit)<br /> will be retained</h4>
+                                    <h4>1 token<br /> will be retained</h4>
                                 </div>
 
                             </v-card-text>
@@ -54,8 +54,8 @@ export default {
                 datasets: [
                     {
                         label: 'Last Week',
-                        borderColor: '#ff4d7e',
-                        backgroundColor: '#ff4d7e',
+                        borderColor: '#5C1A81',
+                        backgroundColor: '#5C1A81',
 
                         tension: 0.25,
                         data: [3, 4, 6, 10, 5, 6]

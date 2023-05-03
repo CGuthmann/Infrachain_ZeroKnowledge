@@ -8,7 +8,7 @@ export default {
         secondary: "#a73aeb",
         info: "#0164d3",
         warning: "#fec500",
-        error: "#ff4d7e",
+        error: "#5C1A81",
         success: "#2cdd9b"
       },
       light: {
@@ -17,7 +17,7 @@ export default {
         secondary: "#a73aeb",
         info: "#0164d3",
         warning: "#fec500",
-        error: "#ff4d7e",
+        error: "#5C1A81",
         success: "#2cdd9b"
       }
     }

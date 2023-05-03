@@ -127,8 +127,8 @@ export default {
                 datasets: [
                     {
                         label: 'Last Week',
-                        borderColor: '#ff4d7e',
-                        backgroundColor: '#ff4d7e',
+                        borderColor: '#5C1A81',
+                        backgroundColor: '#5C1A81',
 
                         tension: 0.25,
                         data: [3, 4, 6, 10, 5, 6]

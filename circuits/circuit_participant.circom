@@ -21,10 +21,9 @@ pragma circom 2.0.6;
 include "../node_modules/circomlib/circuits/poseidon.circom";
 include "./EdDSAPoseidonVerifier.circom";
 include "../node_modules/circomlib/circuits/comparators.circom";
+include "../elgamal-babyjub/circom/decrypt.circom";
 
 template ZKP_MPC_A() {
-
-    
     signal input current_sum; //= r for first participant
     //log("r: ", current_sum);
 
@@ -44,6 +43,12 @@ template ZKP_MPC_A() {
 
     signal input private_consumption;
     //log("M: ", M);
+
+    //ElGamal input
+    signal input c1[2];
+    signal input c2[2];
+    signal input xIncrement;
+    signal input privKey;
 
     component compCur = LessThan(64);
     compCur.in[0] <== current_sum;
@@ -75,13 +80,20 @@ template ZKP_MPC_A() {
 
     comSumBefore <== hasherSumBefore.out;
 
-    signal output comSumAfter;
+    component elGamalDecrypt = ElGamalDecrypt();
 
-    component hasherSumAfter = Poseidon(1);
-    hasherSumAfter.inputs[0] <== current_sum + private_consumption;
+    elGamalDecrypt.c1 <=== c1;
+    elGamalDecrypt.c2 <=== c2;
+    elGamalDecrypt.c2 <=== xIncrement;
+    elGamalDecrypt.c2 <=== privKey;
 
-    comSumAfter <== hasherSumAfter.out;
+    signal output comSumAfter;//output of ElGamal of the previous participant, input to be decrypted. Pass as private input the encrypted value (encrypted outside), aditional private input the public key we encrypt for - i
 
+    // replacement of hashing by ElGamal Encryption
+    //component hasherSumAfter = Poseidon(1);
+    //hasherSumAfter.inputs[0] <== current_sum + private_consumption;
+
+    comSumAfter <== elGamalDecrypt.out;
 }
 
 component main = ZKP_MPC_A();

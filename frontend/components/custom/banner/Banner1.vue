@@ -8,22 +8,18 @@
         <v-row justify="center">
           <v-col cols="12" md="7" lg="6" class="d-flex align-center">
             <div class="text-center text-md-left">
-              <v-chip small class="bg-dark" text-color="white">
-                Competition
-              </v-chip>
               <h2 class="
                   banner1-title
-                  font-weight-bold  
+                  font-weight-bold
                 ">
-                Gain incentives reducing energy consumption
+                Utilizing sensitive financial data on blockchains with zero-knowledge proofs
               </h2>
               <p class="op-8 font-weight-regular">
-                Participate in our serious game in order to gain incentives. You are competing against two other
-                challengers and try to reach the highest energy reduction.
+                By the Winners of the 2022 Infrachain Hackathon
               </p>
               <div class="mt-16 pt-2">
                 <v-btn color="error" class="btn-custom-lg btn-arrow mt-10" large rounded @click="checkStatus"
-                  elevation="0">
+                       elevation="0">
                   <span>Get Started</span>
                   <i class=" mdi mdi-arrow-right"></i>
                 </v-btn>
@@ -33,7 +29,7 @@
             </div>
           </v-col>
           <v-col cols="12" md="5" lg="5">
-            <v-img :src="require('@/assets/images/banner/feet.png')" alt="banner" />
+            <v-img :src="require('@/assets/images/banner/feet.png')" alt="banner"/>
           </v-col>
         </v-row>
       </v-container>
@@ -47,7 +43,7 @@
               <h2 id="sufficientTokensAvailable" class="section-title font-weight-medium">
                 Wallet Check
               </h2>
-              <p>Current balance: XXX</p>
+              <p>Current balance: {{ tokenAmount }} tokens</p>
             </div>
           </v-col>
         </v-row>
@@ -59,19 +55,19 @@
                   <i class="mdi mdi-check-circle"></i>
                   <!-- <i class="mdi mdi-close-circle"></i> -->
                 </div>
-                <h5 class="font-weight-medium font-18">Enough tokens available for participation</h5>
+                <h5 class="font-weight-medium font-18">Enough tokens available for participation in financial MPC</h5>
                 <p class="mt-10 mb-8">
                   You need to provide one token as a deposit (no fee!) for the competition. As you already have enough
                   in your wallet, you're good to go!
                 </p>
                 <div>
                   <v-btn color="error" class="btn-custom-lg btn-arrow mt-10" large rounded @click="depositToken"
-                    elevation="0">
+                         elevation="0">
                     <span>Deposit Token and start competition</span>
                     <i class=" mdi mdi-arrow-right"></i>
                   </v-btn>
                   <v-progress-circular class="circular-loading" v-if="loadingDepositToken" indeterminate
-                    color="primary">
+                                       color="primary">
                   </v-progress-circular>
                 </div>
               </v-card-text>
@@ -89,7 +85,7 @@
               <h2 id="insufficientTokensAvailable" class="section-title font-weight-medium">
                 Wallet Check
               </h2>
-              <p>Current balance: 0 ETH</p>
+              <p>Current balance: {{ tokenAmount }} tokens</p>
             </div>
           </v-col>
         </v-row>
@@ -100,19 +96,19 @@
                 <div class="justify-center close-circle icon-round bg-light-info">
                   <i class="mdi mdi-close-circle"></i>
                 </div>
-                <h5 class="font-weight-medium font-18">Not enough tokens available for participation</h5>
+                <h5 class="font-weight-medium font-18">Not enough tokens available for financial MPC service </h5>
                 <p class="mt-10 mb-8">
-                  You need to provide one token as a deposit (no fee!) for the competition. As you don't have sufficient
-                  funds you are allowed to claim one initial token
+                  You need to have tokens to use the financial service. As you don't have sufficient funds you are
+                  allowed to claim one initial token
                 </p>
                 <div>
                   <v-btn color="error" class="btn-custom-lg btn-arrow mt-10" large rounded @click="depositToken"
-                    elevation="0">
+                         elevation="0">
                     <span>Claim Token and start competition</span>
                     <i class=" mdi mdi-arrow-right"></i>
                   </v-btn>
                   <v-progress-circular class="circular-loading" v-if="loadingDepositToken" indeterminate
-                    color="primary">
+                                       color="primary">
                   </v-progress-circular>
                 </div>
               </v-card-text>
@@ -130,6 +126,7 @@ export default {
   name: "Banner1",
   data() {
     return {
+      tokenAmount: 0,
       loadingGetStarted: false,
       loadingDepositToken: false,
       loadingRequestToken: false,
@@ -171,15 +168,12 @@ export default {
     },
     async depositToken() {
       this.loadingDepositToken = true
-      if (await this.checkSufficientTokensAvailable()) {
+      setTimeout(() => {
+        this.showSufficientTokensAvailable = true
+        this.showInsufficientTokensAvailable = false
+        this.tokenAmount = 1;
         this.loadingDepositToken = false
-      }
-    },
-    async claimInitialToken() {
-      this.loadingRequestToken = true
-      if (await this.checkSufficientTokensAvailable()) {
-        this.loadingDepositToken = false
-      }
+      }, 1000)
     }
   }
 };
