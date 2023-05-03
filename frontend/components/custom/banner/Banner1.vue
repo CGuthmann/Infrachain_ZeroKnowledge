@@ -57,13 +57,13 @@
                 </div>
                 <h5 class="font-weight-medium font-18">Enough tokens available for participation in financial MPC</h5>
                 <p class="mt-10 mb-8">
-                  You need to provide one token as a deposit (no fee!) for the competition. As you already have enough
+                  You need to deposit one token to participate in the financial MPC. As you already have enough
                   in your wallet, you're good to go!
                 </p>
                 <div>
-                  <v-btn color="error" class="btn-custom-lg btn-arrow mt-10" large rounded @click="depositToken"
+                  <v-btn color="error" class="btn-custom-lg btn-arrow mt-10" large rounded @click="redirectToRunningStatus"
                          elevation="0">
-                    <span>Deposit Token and start competition</span>
+                    <span>Participate in MPC</span>
                     <i class=" mdi mdi-arrow-right"></i>
                   </v-btn>
                   <v-progress-circular class="circular-loading" v-if="loadingDepositToken" indeterminate
@@ -104,7 +104,7 @@
                 <div>
                   <v-btn color="error" class="btn-custom-lg btn-arrow mt-10" large rounded @click="depositToken"
                          elevation="0">
-                    <span>Claim Token and start competition</span>
+                    <span>Claim Token</span>
                     <i class=" mdi mdi-arrow-right"></i>
                   </v-btn>
                   <v-progress-circular class="circular-loading" v-if="loadingDepositToken" indeterminate
@@ -173,6 +173,13 @@ export default {
         this.showInsufficientTokensAvailable = false
         this.tokenAmount = 1;
         this.loadingDepositToken = false
+      }, 1000)
+    },
+    async redirectToRunningStatus() {
+      this.loadingDepositToken = true
+      setTimeout(() => {
+        this.loadingDepositToken = false
+        this.$router.push({path:'/status/running'})
       }, 1000)
     }
   }
