@@ -23,6 +23,12 @@ node deploy.js
 
 sleep 5
 
+cd frontend
+docker-compose up -d
+cd ..
+
+sleep 5
+
 node prepareGame.js
 
 sleep 5
