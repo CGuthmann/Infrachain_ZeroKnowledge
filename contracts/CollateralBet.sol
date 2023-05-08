@@ -57,7 +57,7 @@ contract CollateralBet is Ownable {
         Stage stage;
         uint256 comA;
         uint256 comR;
-        uint256 comB; 
+        uint256 comB;
         uint256 comC;
         uint256 comRA;
         uint256 comRAB;
@@ -114,7 +114,8 @@ contract CollateralBet is Ownable {
 
     function deposit(uint256 _amount) public payable returns (uint256) {
         uint256 _requiredAmount = 1;
-        require(_amount == _requiredAmount, "Amount is not equal to 1"); // the smart contract
+        require(_amount == _requiredAmount, "Amount is not equal to 1");
+        // the smart contract
         ERC20BurnableInterface.transferFrom(msg.sender, address(this), _amount);
 
         register(msg.sender);
@@ -217,95 +218,133 @@ contract CollateralBet is Ownable {
         addressToState[cAddress] = index;
     }
 
+    event OneFinished(
+        uint256[2] a,
+        uint256[2][2] b,
+        uint256[2] c,
+        uint256[3] input
+    );
+
     function one(
-        // encrypted value
-        uint256[2] memory a, 
+    // encrypted value
+        uint256[2] memory a,
         uint256[2][2] memory b,
         uint256[2] memory c,
-        uint256[3] memory input) external{
-            uint index = addressToState[msg.sender];
+        uint256[3] memory input) external {
+        uint index = addressToState[msg.sender];
 
-            require(state[index].stage == Stage.Zero, "Game is not in stage 0 (it is not A's turn)");
-            require(state[index].aAddress == msg.sender, "Sender is not role A");
-            require(verifierCircuitParticipantsInterface.verifyProof(a, b, c, input), "Proof invalid");
+        require(state[index].stage == Stage.Zero, "Game is not in stage 0 (it is not A's turn)");
+        require(state[index].aAddress == msg.sender, "Sender is not role A");
+        require(verifierCircuitParticipantsInterface.verifyProof(a, b, c, input), "Proof invalid");
 
-            state[index].comA = input[0];
-            state[index].comR = input[1];
-            state[index].comRA = input[2];
-            // set encrypted value
+        state[index].comA = input[0];
+        state[index].comR = input[1];
+        state[index].comRA = input[2];
+        // set encrypted value
 
-            state[index].stage = Stage.One;
-        }
+        state[index].stage = Stage.One;
+        emit OneFinished(a, b, c, input);
+    }
 
+    event TwoFinished(
+        uint256[2] a,
+        uint256[2][2] b,
+        uint256[2] c,
+        uint256[3] input
+    );
 
     function two(
-        // encrypted value
-        uint256[2] memory a, 
+    // encrypted value
+        uint256[2] memory a,
         uint256[2][2] memory b,
         uint256[2] memory c,
         uint256[3] memory input
     ) external {
-            uint index = addressToState[msg.sender];
+        uint index = addressToState[msg.sender];
 
-            require(state[index].stage == Stage.One, "Game is not in stage 1 (it is not B's turn)");
-            require(state[index].bAddress == msg.sender, "Sender is not role B");
-            require(input[1] == state[index].comRA, "B is not adding to A's value");
-            require(verifierCircuitParticipantsInterface.verifyProof(a, b, c, input), "Proof invalid");
+        require(state[index].stage == Stage.One, "Game is not in stage 1 (it is not B's turn)");
+        require(state[index].bAddress == msg.sender, "Sender is not role B");
+        require(input[1] == state[index].comRA, "B is not adding to A's value");
+        require(verifierCircuitParticipantsInterface.verifyProof(a, b, c, input), "Proof invalid");
 
-            state[index].comB = input[0];
-            state[index].comRAB = input[2];
-            // set encrypted value     
+        state[index].comB = input[0];
+        state[index].comRAB = input[2];
+        // set encrypted value
 
-            state[index].stage = Stage.Two;
+        state[index].stage = Stage.Two;
+        emit TwoFinished(a, b, c, input);
     }
+
+    event ThreeFinished(
+        uint256[2] a,
+        uint256[2][2] b,
+        uint256[2] c,
+        uint256[3] input
+    );
 
     function three(
-        // encrypted value
-        uint256[2] memory a, 
+    // encrypted value
+        uint256[2] memory a,
         uint256[2][2] memory b,
         uint256[2] memory c,
-        uint256[3] memory input) external 
+        uint256[3] memory input) external
     {
-            uint index = addressToState[msg.sender];
+        uint index = addressToState[msg.sender];
 
-            require(state[index].stage == Stage.Two, "Game is not in stage 2 (it is not C's turn)");
-            require(state[index].cAddress == msg.sender, "Sender is not role C");
-            require(input[1] == state[index].comRAB, "C is not adding to B's value");
-            require(verifierCircuitParticipantsInterface.verifyProof(a, b, c, input), "Proof invalid");
+        require(state[index].stage == Stage.Two, "Game is not in stage 2 (it is not C's turn)");
+        require(state[index].cAddress == msg.sender, "Sender is not role C");
+        require(input[1] == state[index].comRAB, "C is not adding to B's value");
+        require(verifierCircuitParticipantsInterface.verifyProof(a, b, c, input), "Proof invalid");
 
-            state[index].comC = input[0];
-            state[index].comRABC = input[2];
-            // set encrypted value    
+        state[index].comC = input[0];
+        state[index].comRABC = input[2];
+        // set encrypted value
 
-            state[index].stage = Stage.Three;
+        state[index].stage = Stage.Three;
+        emit ThreeFinished(a, b, c, input);
     }
 
+    event FourFinished(
+        uint256[2] a,
+        uint256[2][2] b,
+        uint256[2] c,
+        uint256[4] input
+    );
+
     function four(
-        uint256[2] memory a, 
+        uint256[2] memory a,
         uint256[2][2] memory b,
         uint256[2] memory c,
         uint256[4] memory input) external {
-            uint index = addressToState[msg.sender];
+        uint index = addressToState[msg.sender];
 
-            require(state[index].stage == Stage.Three, "Game is not in stage 3 (it is not A's second turn)");
-            require(state[index].aAddress == msg.sender, "Sender is not role A");
-            require(input[0] == state[index].comA, "C is not adding to B's value");
-            require(input[1] == state[index].comRABC, "C is not adding to B's value");
-            require(input[2] == state[index].comRA, "C is not adding to B's value");
-            require(verifierCircuitTotalInterface.verifyProof(a, b, c, input), "Proof invalid");
+        require(state[index].stage == Stage.Three, "Game is not in stage 3 (it is not A's second turn)");
+        require(state[index].aAddress == msg.sender, "Sender is not role A");
+        require(input[0] == state[index].comA, "C is not adding to B's value");
+        require(input[1] == state[index].comRABC, "C is not adding to B's value");
+        require(input[2] == state[index].comRA, "C is not adding to B's value");
+        require(verifierCircuitTotalInterface.verifyProof(a, b, c, input), "Proof invalid");
 
-            state[index].total = input[3];
-            // set encrypted value    
+        state[index].total = input[3];
+        // set encrypted value
 
-            state[index].stage = Stage.Four;
+        state[index].stage = Stage.Four;
 
-            mintTokens(state[index].aAddress, 1);
-            mintTokens(state[index].bAddress, 1);
-            mintTokens(state[index].cAddress, 1);
+        mintTokens(state[index].aAddress, 1);
+        mintTokens(state[index].bAddress, 1);
+        mintTokens(state[index].cAddress, 1);
+        emit FourFinished(a, b, c, input);
     }
 
+    event FiveFinished(
+        uint256[2] a,
+        uint256[2][2] b,
+        uint256[2] c,
+        uint256[2] input
+    );
+
     function five(
-        uint256[2] memory a, 
+        uint256[2] memory a,
         uint256[2][2] memory b,
         uint256[2] memory c,
         uint256[2] memory input
@@ -314,32 +353,33 @@ contract CollateralBet is Ownable {
         uint index = addressToState[msg.sender];
         require(state[index].stage == Stage.Four, "Game is not in stage 4 (the mpc is not completed)");
         require(state[index].total == input[1]);
-        
-        if(msg.sender == state[index].aAddress){
+
+        if (msg.sender == state[index].aAddress) {
             require(state[index].comA == input[0]);
             addressToState[state[index].aAddress] = 0;
             state[index].aAddress = address(0);
         }
-        else if(msg.sender == state[index].bAddress){
+        else if (msg.sender == state[index].bAddress) {
             require(state[index].comB == input[0]);
             addressToState[state[index].bAddress] = 0;
             state[index].bAddress = address(0);
         }
-        else if(msg.sender == state[index].cAddress){
+        else if (msg.sender == state[index].cAddress) {
             require(state[index].comC == input[0]);
             addressToState[state[index].cAddress] = 0;
             state[index].cAddress = address(0);
-        }else{
+        } else {
             revert();
         }
 
-        require(verifierCircuitClaimInterface.verifyProof(a, b, c, input),"Proof invalid");
+        require(verifierCircuitClaimInterface.verifyProof(a, b, c, input), "Proof invalid");
 
-        mintTokens(msg.sender, 10);        
+        mintTokens(msg.sender, 10);
+        emit FiveFinished(a, b, c, input);
     }
 
     function resetState() internal {
-        for(uint256 i = 0; i < state.length; i++){
+        for (uint256 i = 0; i < state.length; i++) {
             delete addressToState[state[i].aAddress];
             delete addressToState[state[i].bAddress];
             delete addressToState[state[i].cAddress];
