@@ -170,7 +170,7 @@ async function main() {
 	response = await instanceCollateralBet.methods.one(calldata[0], calldata[1], calldata[2],
 		calldata[3]).send({
 			from: a_address,
-			gas: 4000000
+			gas: 6000000
 		}).catch(err => {
 			console.log(err);
 		})
@@ -216,7 +216,7 @@ async function main() {
 		response = await instanceCollateralBet.methods.two(calldata[0], calldata[1], calldata[2],
 			calldata[3]).send({
 				from: b_address,
-				gas: 4000000
+				gas: 6000000
 			}).catch(err => {
 				console.log(err);
 			})
@@ -261,7 +261,7 @@ async function main() {
 		response = await instanceCollateralBet.methods.three(calldata[0], calldata[1], calldata[2],
 			calldata[3]).send({
 				from: c_address,
-				gas: 4000000
+				gas: 6000000
 			}).catch(err => {
 				console.log(err);
 			})
@@ -307,7 +307,7 @@ async function main() {
 		response = await instanceCollateralBet.methods.four(calldata[0], calldata[1], calldata[2],
 			calldata[3]).send({
 				from: a_address,
-				gas: 4000000
+				gas: 6000000
 			}).catch(err => {
 				console.log(err);
 			})
@@ -353,7 +353,7 @@ async function main() {
 		response = await instanceCollateralBet.methods.five(calldata[0], calldata[1], calldata[2],
 			calldata[3]).send({
 				from: a_address,
-				gas: 4000000
+				gas: 6000000
 			}).catch(err => {
 				console.log(err);
 				console.log(err.message)

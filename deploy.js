@@ -67,7 +67,7 @@ async function main() {
 
 	contractParticipantVerifierInstance = await contractParticipantVerifierSend.send({
 		from: config.account,
-		gas: 4000000
+		gas: 6000000
 	})
 
 	await new Promise(r => setTimeout(r, 2* delay));
@@ -104,7 +104,7 @@ async function main() {
 
         contractTotalVerifierInstance = await contractTotalVerifierSend.send({
             from: config.account,
-            gas: 4000000
+            gas: 6000000
         })
 
         
@@ -145,7 +145,7 @@ async function main() {
 
         contractClaimVerifierInstance = await contractClaimVerifierSend.send({
             from: config.account,
-            gas: 4000000
+            gas: 6000000
         })
 
 
@@ -182,7 +182,7 @@ async function main() {
 
         contractCollateralTokenInstance = await contractCollateralTokenSend.send({
             from: config.account,
-            gas: 4000000
+            gas: 6000000
         })
 
 
@@ -217,9 +217,9 @@ async function main() {
 
 	const contractCollateralBetInstance = await contractCollateralBetSend.send({
 		from: config.account,
-		gas: 4000000
+		gas: 6000000
 	})
-    console.log("MainVerifier deployed at: ", contractCollateralBetInstance._address);
+    console.log("CollateralBet deployed at: ", contractCollateralBetInstance._address);
 
     contractAddresses.collateralBet = contractCollateralBetInstance._address;
 
