@@ -53,11 +53,14 @@ x-quorum-def: &quorum-def
               --rpcport 8545 \
               --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft \
               --port 21000 \
+              --ws \
+              --ws.addr 0.0.0.0 \
+              --ws.port 8546 \
+              --ws.api admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft \
+              --ws.origins "*" \
               --unlock 0 \
               --password /3nodes/passwords.txt \
               ${QUORUM_GETH_ARGS:-} $${GETH_ARGS_raft}
-
-
 
 services:
 
@@ -66,6 +69,7 @@ services:
         hostname: quorum-node1
         ports:
             - '22000:8545'
+            - '23000:8546'
         volumes:
             # - vol1:/qdata
             - ./quorum-network:/3nodes:ro
@@ -82,6 +86,7 @@ services:
         hostname: quorum-node2
         ports:
             - '22001:8545'
+            - '23001:8546'
         volumes:
             # - vol2:/qdata
             - ./quorum-network:/3nodes:ro
@@ -98,6 +103,7 @@ services:
         hostname: quorum-node3
         ports:
             - '22002:8545'
+            - '23002:8546'
         volumes:
             # - vol3:/qdata
             - ./quorum-network:/3nodes:ro
