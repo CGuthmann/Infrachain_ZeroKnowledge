@@ -10,6 +10,13 @@ docker-compose down
 docker-compose up -d
 cd ..
 
+sleep 5
+
+cd frontend
+docker-compose down
+docker-compose up -d
+cd ..
+
 sleep 10
 
 cd circuits
@@ -20,12 +27,6 @@ truffle build --reset
 echo "Running some sample transactions"
 
 node deploy.js
-
-sleep 5
-
-cd frontend
-docker-compose up -d
-cd ..
 
 sleep 5
 

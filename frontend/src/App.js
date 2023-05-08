@@ -11,7 +11,7 @@ const App = () => {
         let loadingTimeout = setInterval(() => {
             if (loading >= 100) return
             const sum = progressArray.reduce((partialSum, a) => partialSum + a, 0)
-            setProgress(sum*20)
+            setProgress(sum * 20)
         }, 1000)
 
         // if (progress === 100) {
@@ -30,6 +30,8 @@ const App = () => {
 
     return (
         <div className="App">
+            <div className="images">
+            </div>
             {loading ? (
                 <ProgressBar progress={progress} trackWidth={5} indicatorWidth={10}/>
             ) : (
@@ -40,6 +42,7 @@ const App = () => {
                         Pi</strong> hits 100%.</p>
                 </div>
             )}
+
         </div>
     )
 }

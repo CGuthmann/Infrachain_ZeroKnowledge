@@ -70,8 +70,8 @@ const ProgressBar = (props) => {
             {!spinnerMode && (
               <span className="svg-pi-label__progress">
                 {`${
-                  progress > 100 ? 100 : progress
-                }%`}
+                  progress > 100 ? 20 : Math.round(progress/20)
+                } out of 5`}
               </span>
             )}
           </div>

@@ -8,6 +8,20 @@
  * @link  https://codepen.io/_rahul/pen/BarobwE
  */
 
+.images {
+  background-image: url("../../assets/chaos.svg");
+  -webkit-background-size: contain;
+  -moz-background-size: contain;
+  -o-background-size: contain;
+  background-size: contain;
+  background-repeat: no-repeat;
+  padding: 40px 20px;
+
+  position: absolute;
+  width: 350px;
+  height: 350px;
+}
+
 .svg-pi-wrapper {
   position: relative;
 }
