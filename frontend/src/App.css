@@ -1,0 +1,21 @@
+/*
+ * App-specific styles
+ *
+ * App containers and other layout helpers that contribute 
+ * to the global structural settings of the app.
+ *
+ * @since 07/07/22
+ */
+
+.App {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.App-content {
+  max-width: 600px;
+  font-size: 2em;
+  text-align: center;
+}

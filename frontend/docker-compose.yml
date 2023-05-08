@@ -1,10 +1,11 @@
-version: '3.7'
+version: "3.9"
 services:
-  node1:
-    image: node:14.16.1
-    working_dir: /app
-    ports:
-      - 3000:3000
+  frontend:
+    container_name: frontend
+    image: node:18
     volumes:
       - ./:/app
-    command: bash -c "npm i && npm run dev"
+    working_dir: /app
+    ports:
+      - "80:3000"
+    command: bash -c "npm i && npm run start"
