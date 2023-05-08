@@ -1,4 +1,6 @@
 import Web3 from "web3";
+import {useCallback, useState} from 'react';
+
 
 const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:23000'));
 
@@ -10,14 +12,18 @@ const eventHashes = [
     web3.utils.sha3('FiveFinished(uint256[2],uint256[2][2],uint256[2],uint256[2])'),
 ];
 
-const progressArray = [0, 0, 0, 0, 0]
+const useSubscribe = (address, topic) => {
+    const [data, setData] = useState(0);
 
-
-const subscribe = (address, topic) => {
     const subscription = web3.eth.subscribe('logs', {
         address,
         topics: [topic],
     })
+
+    // const index = eventHashes.indexOf(topic)
+    // setTimeout(()=>{
+    //     setData(1)
+    // }, 1000+1000*index)
 
     subscription
         .on("connected", function (subscriptionId) {
@@ -25,8 +31,7 @@ const subscribe = (address, topic) => {
         })
         .on('data', function (event) {
             // console.debug('data', event);
-            progressArray[eventHashes.indexOf(event.topics[0])]++
-            console.log(progressArray)
+            setData(1)
         })
         .on('changed', function (event) {
             console.debug('changed', event)
@@ -34,13 +39,11 @@ const subscribe = (address, topic) => {
         .on('error', function (error, receipt) {
             console.error('error', error, receipt);
         });
-}
 
-const setUpListeners = async (address = '0x9Fb72d91b7cfA531fE40dD42704149e972543aEE') => {
-    eventHashes.forEach(eventHash => subscribe(address, eventHash))
+    return [data];
 }
 
 export {
-    setUpListeners,
-    progressArray
+    useSubscribe,
+    eventHashes,
 }

@@ -9,20 +9,19 @@
  */
 
 .images {
-  background-image: url("../../assets/chaos.svg");
   -webkit-background-size: contain;
   -moz-background-size: contain;
   -o-background-size: contain;
   background-size: contain;
   background-repeat: no-repeat;
-  padding: 40px 20px;
 
   position: absolute;
-  width: 350px;
-  height: 350px;
+  width: 1920px;
+  height: 1080px;
 }
 
 .svg-pi-wrapper {
+  margin: 0px 40px 60px 0px;
   position: relative;
 }
 
