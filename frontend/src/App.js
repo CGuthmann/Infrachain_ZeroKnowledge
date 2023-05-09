@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
+import Web3 from 'web3';
 import ProgressBar from './components/ProgressBar/ProgressBar'
 import './App.css'
-import {useSubscribe, eventHashes} from "./services/Web3";
 
 import img0 from './assets/stages/Slide2.png';
 import img1 from './assets/stages/Slide3.png';
@@ -12,41 +12,65 @@ import img5 from './assets/stages/Slide7.png';
 
 const images = [img0, img1, img2, img3, img4, img5]
 
+const address = '0x9Fb72d91b7cfA531fE40dD42704149e972543aEE'
+
+const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:23000'));
+const eventHashes = [
+    web3.utils.sha3('OneFinished(uint256[2],uint256[2][2],uint256[2],uint256[3])'),
+    web3.utils.sha3('TwoFinished(uint256[2],uint256[2][2],uint256[2],uint256[3])'),
+    web3.utils.sha3('ThreeFinished(uint256[2],uint256[2][2],uint256[2],uint256[3])'),
+    web3.utils.sha3('FourFinished(uint256[2],uint256[2][2],uint256[2],uint256[4])'),
+    web3.utils.sha3('FiveFinished(uint256[2],uint256[2][2],uint256[2],uint256[2])'),
+];
+
+
 const App = () => {
-    const [loading, setLoading] = useState(true)
     const [progress, setProgress] = useState(0)
     const [img, setImg] = useState(images[0])
 
-    const address = '0x9Fb72d91b7cfA531fE40dD42704149e972543aEE'
-    const [one] = useSubscribe(address, eventHashes[0])
-    const [two] = useSubscribe(address, eventHashes[1])
-    const [three] = useSubscribe(address, eventHashes[2])
-    const [four] = useSubscribe(address, eventHashes[3])
-    const [five] = useSubscribe(address, eventHashes[4])
-    const events = [one, two, three, four, five]
-
 
     useEffect(() => {
-        if (loading >= 100) return
-        const sum = events.reduce((partialSum, a) => partialSum + a, 0)
-        console.log(sum)
-        setImg(images[sum])
-        setProgress(sum * 20)
-    }, [progress, loading, events])
+        setImg(images[progress])
+    }, [progress])
 
     useEffect(() => {
-        document.title = "SVG Pi implemented in React"
+        document.title = "Partnership Day"
+
+        eventHashes.forEach(topic => {
+            const subscription = web3.eth.subscribe('logs', {
+                address,
+                topics: [topic],
+            })
+
+            subscription
+                .on("connected", function (subscriptionId) {
+                    console.log('SubID: ', subscriptionId);
+                })
+                .on('data', function (event) {
+                    // console.debug('data', event);
+                    setProgress(prevProgress => {
+                        const newProgress = prevProgress + 1
+                        if (newProgress <= 5)
+                            return newProgress
+                        else {
+                            return prevProgress
+                        }
+                    })
+                })
+                .on('changed', function (event) {
+                    console.debug('changed', event)
+                })
+                .on('error', function (error, receipt) {
+                    console.error('error', error, receipt);
+                });
+        })
     }, [])
 
     return (
 
         <div className="App">
             <img className="images" src={img}/>
-            {loading ? (<ProgressBar progress={progress} trackWidth={5} indicatorWidth={10}/>) : (<div
-                className="App-content">
-                <p>This main page of the app shows up as soon as the <strong title="ProgressBar">SVG
-                    Pi</strong> hits 100%.</p>
-            </div>)}
+            <ProgressBar progress={progress * 20} trackWidth={5} indicatorWidth={10}/>
 
         </div>)
 }

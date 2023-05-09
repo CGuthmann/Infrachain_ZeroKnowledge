@@ -17,7 +17,11 @@ docker-compose down
 docker-compose up -d
 cd ..
 
-sleep 10
+echo "Waiting frontend to launch on 3000..."
+while ! [[ $(curl --fail http://localhost:3000 | grep '<!DOCTYPE html>') == '<!DOCTYPE html>' ]]; do
+  sleep 10
+done
+echo "Frontend launched"
 
 cd circuits
 ./bootstrap.sh
