@@ -1,0 +1,15 @@
+/*
+ * SVG Progress Indicator
+ *
+ * Set-up the indicator using SVG attributes that are 
+ * supported as properties in CSS.
+ *
+ * @since 07/07/22
+ * @link  https://codepen.io/_rahul/pen/BarobwE
+ */
+
+.header {
+  z-index: 99999 !important;
+  position: absolute !important;
+  background-color: #000000 !important;
+}

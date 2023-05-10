@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react'
 import Web3 from 'web3';
 import ProgressBar from './components/ProgressBar/ProgressBar'
+import Header from "./components/Header/Header";
 import './App.css'
 
 import img0 from './assets/stages/Slide2.png';
@@ -68,11 +69,14 @@ const App = () => {
 
     return (
 
-        <div className="App">
-            <img className="images" src={img}/>
-            <ProgressBar progress={progress * 20} trackWidth={5} indicatorWidth={10}/>
-
-        </div>)
+        <div>
+            <Header/>
+            <div className="App">
+                <img className="images" src={img}/>
+                <ProgressBar progress={progress * 20} trackWidth={5} indicatorWidth={10}/>
+            </div>
+        </div>
+    )
 }
 
 export default App
