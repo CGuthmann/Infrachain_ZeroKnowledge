@@ -75,6 +75,10 @@ const App = () => {
                 <img className="images" src={img}/>
                 <ProgressBar progress={progress * 20} trackWidth={5} indicatorWidth={10}/>
             </div>
+            <div className={'text-box'}>
+                <textarea className={'presentation'} value={'Johannes, put your text in here'}/>
+            </div>
+
         </div>
     )
 }
