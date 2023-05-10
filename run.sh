@@ -29,13 +29,7 @@ cd ..
 
 truffle build --reset
 echo "Running some sample transactions"
-
 node deploy.js
 
-sleep 5
-
-node prepareGame.js
-
-sleep 5
-
-node playGame.js
+echo "Running server"
+node server.js

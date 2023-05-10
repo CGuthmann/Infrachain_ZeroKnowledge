@@ -31,7 +31,7 @@ const account = config.account
 
 const accounts = require("./mock_addresses.json");
 
-async function main() {
+async function prepareGame() {
 
 	// console.log(config.account);
 
@@ -202,12 +202,9 @@ async function main() {
 
 	console.log(response);
 
-
-
-	process.exit(0);
-
-
-
+	console.log('You can actually play the game!')
 }
 
-main();
+module.exports={
+	prepareGame
+}
