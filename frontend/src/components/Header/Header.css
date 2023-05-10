@@ -19,7 +19,9 @@
 }
 
 .header-button{
-    box-shadow: 0px 2px 4px -1px rgba(90,35,125), 0px 4px 5px 0px rgba(162,161,161), 0px 1px 10px 0px rgba(0,0,0,0) !important;
+    font-size: 1.3em !important;
+    border: 1px solid black!important;
+    font-weight: bold !important;
     margin-right: 50px !important;
     color: rgba(90,35,125) !important;
 }
